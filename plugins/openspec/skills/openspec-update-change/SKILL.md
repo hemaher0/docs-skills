@@ -9,15 +9,21 @@ metadata:
   generatedBy: "1.8.0"
 ---
 
-Revise a change's existing planning artifacts and keep them coherent. Never edit code.
+Revise a change's existing planning artifacts and keep them coherent. This
+workflow edits planning artifacts; other workflows own creation of missing
+artifacts and implementation. Continue through those owners only when the
+user's existing request authorizes the next activity and required gates are
+satisfied. A planning revision alone does not authorize code changes.
 
 When the revision changes product behavior, compare it with the relevant main
 spec and revise the existing delta spec's requirements and scenarios too. If a
 needed spec artifact does not exist, this update workflow cannot create it:
 report that gap and use the CLI-supported artifact creation workflow. Do not
 claim a proposal/design/tasks-only change is complete or substitute a local
-plan. Append the revision and source links to the configured
-work item through docs-skills when available, otherwise through the local
+plan. Follow the project's work-history capture policy; a configured storage
+location does not enable capture. When that policy requires it, append the
+revision and source links to the owning work item through docs-skills when
+available, otherwise through the local
 `.docs-schema` and normal file tools.
 
 **Store selection:** If the user names a store (a store is a standalone OpenSpec repo registered on this machine) or the work lives in one, run `openspec store list --json` to discover registered store ids, then pass `--store <id>` on the commands that read or write specs and changes (`new change`, `status`, `instructions`, `list`, `show`, `validate`, `archive`, `doctor`, `context`, `view`). Once selected, treat `--store <id>` as sticky for the rest of the workflow. Every unscoped example of those commands below is shorthand: before running it, append the flag. For example, run `openspec status --change "<name>" --json --store "<id>"`, not the unscoped form shown below. Other commands do not take the flag. Hints printed by commands already carry the flag; keep it on follow-ups. Without a store, commands act on the nearest local `openspec/` root.
@@ -70,18 +76,33 @@ work item through docs-skills when available, otherwise through the local
    - Revise only files that already exist (`existingOutputPaths`). Do NOT create artifacts that don't exist yet, and do NOT invent new files under a glob artifact - note them and point the user to `$openspec-continue-change (Codex) or /openspec-continue-change (other agents)` to create them.
    - If the change is already coherent, say so and make no edits.
 
-5. **Confirm and apply, one artifact at a time**
-   - Show each proposed revision and why. Write only after the user confirms.
+5. **Apply authorized revisions, one artifact at a time**
+   - Explain the revisions and their purpose, then apply edits within the
+     user's existing authorization. A request to revise or reconcile the
+     artifacts already covers the necessary edits in that scope.
+   - Ask only for a material unresolved choice, work outside that scope, or a
+     project-required approval not already granted. Wait before its dependent
+     edits; unrelated authorized work may continue.
    - If the user rejects a revision, do not write it - leave that artifact unchanged.
    - When a substantial rewrite is needed, get that artifact's rules and template first:
      ```bash
      openspec instructions "<artifact-id>" --change "<name>" --json
      ```
 
-6. **Point to the next step (guidance only - NEVER act on it)**
-   - Artifacts still missing -> suggest `$openspec-continue-change (Codex) or /openspec-continue-change (other agents)` to create them.
-   - Change already implemented (tasks checked off / already applied) -> the code may no longer match the revised plan; suggest `$openspec-apply-change (Codex) or /openspec-apply-change (other agents)` to carry the delta into code.
-   - Everything done and implemented -> suggest `$openspec-archive-change (Codex) or /openspec-archive-change (other agents)`.
+6. **Continue authorized next steps, or provide guidance**
+   Preserve responsibility boundaries: the next workflow owns its activity.
+   If the user already requested that activity, continue through its available
+   workflow or CLI-supported alternative after required gates. Otherwise
+   report it as a recommendation without performing it.
+   - Artifacts still missing -> route authorized creation to the available
+     artifact workflow or CLI-supported alternative; otherwise explain what
+     remains to be created.
+   - Existing implementation -> compare it with the revised plan and identify
+     needed code changes; use the apply workflow when implementing them is
+     already authorized, otherwise recommend it. Checked task boxes alone do
+     not establish that the revised behavior is implemented or verified.
+   - Everything implemented and verified -> use the archive workflow only when
+     archival is requested; otherwise recommend it as the next option.
 
 **Output**
 
@@ -91,10 +112,13 @@ After each invocation, show:
 - Where the change stands and the recommended next command
 
 **Guardrails**
-- When a requested revision includes a diagram, use an available document workflow to route diagram representation and verification; otherwise follow the project's diagram convention. Keep the existing artifact paths, rules, and confirmation step in control.
-- Planning artifacts only - NEVER edit implementation code. If the revised plan implies code changes, stop and point to `$openspec-apply-change (Codex) or /openspec-apply-change (other agents)`.
+- When a requested revision includes a diagram, use an available document workflow to route diagram representation and verification; otherwise follow the project's diagram convention. Keep the existing artifact paths, rules, and authorization boundaries in control.
+- Edit planning artifacts in this workflow. If code changes are already
+  authorized, transition to the apply workflow after reconciling the plan and
+  required gates; otherwise report the implementation needed without changing code.
 - Use the artifact ids and paths reported by `openspec status`; never branch on hardcoded artifact names.
 - Edit only the concrete files in `existingOutputPaths`; never write to a glob `resolvedOutputPath`.
 - Do not advance the build frontier: no new artifacts, no new files under glob artifacts - that is `$openspec-continue-change (Codex) or /openspec-continue-change (other agents)`'s job.
-- Confirm every edit with the user before writing.
+- Preserve existing authorization and explicit rejections. Resolve only
+  missing material decisions or required approvals before dependent edits.
 - If the request changes the change's *intent* rather than refining it, first verify whether the expanded-profile `$openspec-new-change (Codex) or /openspec-new-change (other agents)` workflow is available. If it is, recommend starting fresh with `$openspec-new-change (Codex) or /openspec-new-change (other agents)` (the "Update vs. Start Fresh" heuristic). If it is unavailable, ask for a distinct unused change name and recommend `openspec new change "<new-change-name>"` instead.

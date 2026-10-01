@@ -8,8 +8,8 @@ description: Use when asked to create, update, or retire reusable internal refer
 Maintain sourced facts or methods that multiple work items can reuse. Keep
 task-specific decisions and discussion in the work item. Create a note when
 the user requests a durable reference or the local schema's `reference-note`
-creation condition is met. A request still belongs in the work-item timeline
-even if no separate reference note is created.
+creation condition is met. When history capture is configured, follow it in
+the owning work item even if no separate reference note is created.
 
 ## Choose the location and scope
 

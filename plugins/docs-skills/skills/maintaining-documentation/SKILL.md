@@ -21,6 +21,14 @@ Check relevant code, configuration, tests, official interfaces, or user-provided
 facts before writing a factual claim. When sources disagree, expose the
 conflict instead of choosing a convenient version.
 
+For development finalization, consume the work owner's accepted requirements,
+necessary derivations and rationale, actual artifact revision, review outcomes,
+and covering evidence. Retain relevant criterion IDs and durable references.
+Ask that owner to reconcile missing or conflicting claims before dependent
+writing; documentation does not redefine the spec or technical verdict.
+Use the implementation's assigned checkout for its accompanying product docs.
+Configured work history keeps its separate repository and audience rules.
+
 Keep implemented behavior separate from proposed behavior and verified design
 reasons separate from guesses about intent. When a private note informs a public
 document, restate only the approved conclusion in terms a reader can understand
@@ -38,6 +46,15 @@ examples, and navigation only when the change makes them stale. Do not change
 implementation code to make documentation claims true; report a code mismatch
 as a separate issue. Do not add a branch, worktree, commit, pull request,
 release note, TODO, or external mirror as a side effect of documentation work.
+
+Before working records are discarded by their owner, preserve the needed
+applied basis and continuation state in the appropriate durable artifacts;
+temporary links alone cannot preserve it. Reader-facing pages contain the
+facts useful to their audience, while detailed private history stays within
+its configured boundary. Return paths, source revision, checks and unresolved
+claims to the caller. The development workflow owns subsequent generalization,
+affected re-verification/review, and completion; Git owns candidate/message
+review and actual commits. This skill adds no independent finalization loop.
 
 When the requested documentation includes a diagram, use
 [maintaining-diagrams](../maintaining-diagrams/SKILL.md) for its representation

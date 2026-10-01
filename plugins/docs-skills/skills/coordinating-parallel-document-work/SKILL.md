@@ -5,6 +5,10 @@ description: Use when parallel agents may write to one canonical document reposi
 
 # Coordinating Parallel Document Work
 
+Coordinate document ownership for already authorized tasks. The selected
+development or research workflow retains task scheduling and technical review;
+this skill does not dispatch extra agents or parallelize sequential implementation.
+
 ## Give each task its own record
 
 Read the configured repository's local schema before dispatch. When it supports
@@ -16,15 +20,17 @@ the coordinator owns the root timeline and integration decisions. A child
 points to its parent in metadata, so workers never edit a parent merely to add
 a backlink. Discover the tree with `python3 .docs-schema/records.py tree --work-item <id>`;
 do not maintain an index file.
-Record the assigned child IDs and any isolated clone locations in the root's
+Record the assigned child IDs and actual assigned workspace locations in the root's
 delegation event so unfinished work can be recovered before integration.
 
-Record every request and discussion in its owning node. The root
+Follow the configured capture policy in each owning node. Under all-turn
+capture, include every request and discussion. The root
 captures user requests, coordination, and acceptance; each child captures its
 delegated request, actions, decisions, evidence, code identity, and next action.
 The child's parent ID supplies the link; the root summarizes its accepted outcome
-without copying the child's event stream. On context handoff, read the root
-and descendants. Do not close a parent while a required child outcome remains
+without copying the child's event stream. The resuming owner reads relevant
+history; give fresh workers bounded context, requirements/revision, authority,
+and required results. Do not close a parent while a required child outcome remains
 unresolved.
 
 If the repository's local schema cannot represent child work items, use one
@@ -38,25 +44,35 @@ experiments, reports, or any other overlapping artifact, name one writer for
 that artifact and have other workers return evidence to that writer. The
 artifact's domain workflow still owns its content and lifecycle.
 
-Prefer independent clones checked out on the configured primary branch, where
-workers can commit only their owned child files locally. They do not push; the
-coordinator imports those commits one at a time. If a shared checkout is used,
-workers may edit disjoint child files but do not stage, commit, or push its Git
-index. The coordinator waits for stable handoffs before repository-wide
-validation and commits completed files. Neither arrangement creates a document
-branch.
-Workers report their child path, actual code SHA, checks, unresolved questions,
-and outcome when handing off a stable record.
+Use the project's Git workflow to reuse or allocate checkouts and designate
+the integration owner. Default to one active writer per checkout; read-only
+workers can share it. Concurrent disjoint writers in one checkout require an
+explicit project exception and one index owner. Separate record paths alone
+do not isolate the index. Independent clones on a dedicated document primary
+branch are an option only when that project's Git policy selects them.
+Workers stage or commit only within their assignment and existing authority;
+the Git owner performs reviewed integration and publication. Do not create
+resources or an automatic commit schedule merely to record delegation.
+
+A child node is durable task history, not a brief/report or handoff. Use the
+selected agent communication procedure for assignments and results; the
+requester retains responsibility. A handoff transfers the named scope with
+no acknowledgement requirement. Preserve work/request identity, pending
+requests, author attribution, current owner, and reply routing. Read-only
+reviewers return evidence to the permitted recorder rather than edit records.
+Workers report their child path, source/code revision, dirty state, checks,
+unresolved findings, and outcome to the current owner.
 
 ## Integrate the tree
 
 Before accepting a child, inspect its current file and evidence rather than
-relying on a worker's summary. Re-read the canonical branch, HEAD, working
-tree, and remote state before committing. Import only the intended child
-changes, then update the root's current state and integration event. Run the
+relying on a worker's summary. The Git owner rechecks actual branch, HEAD,
+working tree, candidate content, and applicable remote state before mutations.
+Integrate only the intended changes under that procedure, then update the
+root's current state and integration event. Run the
 local validator and tree command to catch duplicate IDs, orphan or cyclic
 relations, broken links, and incomplete nodes; inspect the exact diff. Follow
-the repository's remote sync policy and never force-push. If another writer
+the repository's review, authorization, and remote sync policy. If another writer
 changed an overlapping file, reconcile its event history before updating it.
 If ownership or reconciliation cannot be established, preserve the child
 evidence and leave the affected integration pending.

@@ -1,34 +1,14 @@
-# Local documentation configuration
+# Local Documentation Configuration
 
-<!--
-Copy only the fields the target repository uses into its AGENTS.local.md.
-Replace placeholders with repository-specific values. Keep credentials and
-tokens out of this file. These fields supply locations and commands, not new
-documentation policy.
--->
+<!-- Optional local path overrides for the shared configuration. Project-wide
+capture, persistence, audience, document conventions, and commands belong in
+effective project instructions or their existing configuration sources.
+Use the configured canonical repository's local .docs-schema without copying
+its paths/types here. Omit overrides that project configuration already
+resolves. Preserve other settings; fill selected values. Ensure effective
+instructions read this file when used. Keep credentials out. -->
 
-## Repository documentation
+## Local Document Locations
 
-- Documentation roots: `<repository-relative paths or Use Repository Default>`
-- Canonical source for generated documentation, if any: `<source paths or None>`
-- Generated documentation destinations, if any: `<paths or None>`
-- Excluded or archived documentation locations: `<paths or None>`
-- Default documentation audience and language: `<audience and language, or Follow Repository Convention>`
-- Focused link or example check: `<command or None>`
-- Documentation build command, if needed: `<command or None>`
-- Editable diagram format, if specified: `<format or Follow Repository Convention>`
-- Focused diagram syntax or render check: `<command or None>`
-
-## Reference notes
-
-- Reference notes root: `<repository-relative path, separate repository path, or Use Repository Default>`
-- Reference archive location, if any: `<path or None>`
-- Reference storage boundary: `<public, private, or Use Repository Default>`
-
-## Work records
-
-- Canonical work-item repository: `<this project repository, or absolute path to one existing document repository>`
-- Work-item repository visibility: `<public or private>`
-- Document schema root: `<canonical repository>/.docs-schema`
-- Document branch policy: `<configured primary branch, such as main; no document branches>`
-- OpenSpec project root or registered store: `<CLI-discovered local root, store id, or None>`
+- Canonical work-item repository: `<absolute local checkout of the same configured repository, or None>`
+- Reference notes root: `<local path override for the configured reference store, or None>`

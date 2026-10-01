@@ -9,26 +9,34 @@ work_item_id: "{{work_item_id}}"
 ---
 # {{date}}-{{topic_title}} TDD
 
+<!-- Use for an actual warranted TDD cycle whose trace needs durable retention.
+The registered creation condition does not require a test cycle for every
+change. Keep baseline/manual/refactoring verification in the existing work
+record or domain report when no TDD cycle applies. Do not invent RED evidence.
+Preserve observed results even if work remains incomplete. -->
+
 ## Behavior and specification
 
-- Expected behavior, OpenSpec requirement/scenario or internal acceptance criterion:
+- {{behavior_and_governing_spec_revision_requirement_or_criterion_id}}
 
 ## Test cases
 
-- Case, input, expected output, and why it protects a meaningful boundary:
+- {{test_id_input_expected_output_and_regression_boundary}}
 
 ## RED
 
-- Test ID, exact command, observed failure, why it is the expected failure, and timestamp:
+- {{test_id_command_observed_failure_reason_timestamp_and_source_revision}}
 
 ## GREEN
 
-- Minimal change, exact command, observed result, and code SHA:
+- {{minimal_change_command_observed_result_and_code_sha}}
 
 ## REFACTOR
 
-- Cleanup or "not needed", protected behavior, command, and result:
+- {{cleanup_or_not_needed_protected_behavior_and_covering_results}}
 
 ## Verification
 
-- Focused and full-suite checks, environment, limitations, and linked evidence:
+- {{criterion_id_check_actual_observation_environment_revision_and_evidence}}
+- Broader checks only when project policy or affected risk requires them: {{checks_or_not_needed_reason}}
+- Remaining limits, findings and current owner: {{actual_limits_and_dispositions}}

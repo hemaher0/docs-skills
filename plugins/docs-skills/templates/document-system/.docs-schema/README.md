@@ -1,8 +1,28 @@
 # Local document schema
 
-Copy this entire `.docs-schema/` directory into the chosen document repository and commit it there. The copied manifest, templates, and script are authoritative for that repository. The installed plugin is only a starter and router. Use one canonical repository for work items: either the project repository or a configured document repository. Do not create document branches; commit validated changes on that repository's configured primary branch according to its normal access controls. An independent clone checked out at that branch can isolate local document edits without creating a branch.
+When work records are selected during project setup,
+copy this entire `.docs-schema/` directory into the one chosen canonical
+repository only if no local schema exists. Preserve an existing local schema
+until an explicit migration. Configure capture, persistence, access, and the
+repository location in project instructions. The copied schema is authoritative;
+the plugin supplies a starter and router. Client installation alone does not
+choose these settings or create project instructions.
 
-For parallel work, create a separate work item for each independently delegated task. Its `parent_work_item_id` points to the root topic or owning subtask; root work items use `null`. Workers own their child files, not the parent. Prefer independent clones on the primary branch: workers commit their own child locally, then one integrator imports the commits and pushes. In a shared checkout, workers edit disjoint child files but only the integrator stages and commits after stable handoffs. No document branch or manually maintained backlink is needed.
+Use the canonical repository's Git procedure for reviewed, authorized
+persistence and allocation. It may explicitly select primary-branch record
+commits without document branches; an independent clone is an option only
+when that procedure chooses it. Product documentation accompanying code stays
+in the assigned code checkout rather than inheriting record-storage rules.
+
+For already authorized parallel work, each independent task can have a child
+whose `parent_work_item_id` points to its root/owning subtask; roots use `null`.
+Give each artifact one writer and keep the coordinator responsible for shared
+state. Default to one active writer per checkout, with suitable separate
+checkouts for concurrent writers; a shared-checkout exception needs explicit
+project Git policy and one index owner. A child is task history, not a brief,
+report, or ownership transfer. The agent communication procedure owns those
+semantics. Read-only workers return events to an authorized recorder. Preserve
+work/request identity, author, current owner, evidence, and pending requests.
 
 The manifest registers the only local record types. Each type has one template, a creation condition, a path, required headings, metadata, and allowed lifecycle values. The common front matter is deliberately a flat YAML subset: each value must be a JSON scalar (`"string"`, number, boolean, or `null`). This keeps the checker independent of YAML packages. Fill placeholders and do not leave them in live records.
 See [template research](TEMPLATE_SOURCES.md) for the external GitHub templates reviewed and the choices adapted to these record types.
@@ -18,6 +38,33 @@ python3 .docs-schema/records.py events --week 2026-09-28 --format markdown
 
 `validate` checks registered paths and types, dates, metadata, sections, ID uniqueness, parent work items, parent cycles, weekly boundaries, and local Markdown links. `list` and `tree` are generated on demand from metadata; `tree` includes child work items and local records linked by `work_item_id`. Keep OpenSpec and experiment links in the owning work item. Do not maintain an `index.md` or parent backlink list. `events` finds timeline entries within a requested Monday-to-Monday Asia/Seoul period, including child events and entries in older work items, for a manually requested weekly report. The script ignores external URLs and non-record Markdown outside the registered roots. It cannot verify the content of a remote source or the truth of a statement.
 
-This starter is schema version 2. An existing version 1 repository stays on its local schema until its owner explicitly adopts the tree format. To migrate, review local customizations, merge the version 2 manifest, templates, and checker, add `parent_work_item_id: null` to each existing root work item (or its actual parent ID), and set every local record's `schema_version` to 2. Validate all records and inspect `tree` before committing the schema and record migration together on the primary branch. Do not silently apply a newer plugin template to an existing repository. If the installed plugin is absent, use this local README, templates, script, and ordinary file tools.
+This starter is schema version 2. An existing version 1 repository stays on its
+local schema until its owner explicitly adopts the tree format. To migrate,
+review local customizations, merge the version 2 manifest, templates, and
+checker, add `parent_work_item_id: null` to each root (or its actual parent ID),
+and set each local record's `schema_version` to 2. Validate all records and
+inspect `tree` before reviewing/persisting schema and migration together through
+the repository's Git procedure. Do not silently apply newer plugin templates.
+If the plugin is absent, use these local instructions and ordinary file tools.
+The guidance changes here retain version 2 paths, fields, required sections,
+and checker behavior; they do not migrate an existing repository.
 
-OpenSpec and research experiment records retain their own native schemas and roots. Do not copy an OpenSpec design or plan into a local `design` or `plan` for the same change. When OpenSpec owns the scope, link its artifacts from the work item instead.
+Formal specs and research records retain their native owners, schemas, and
+roots. When OpenSpec owns the scope, link its artifacts instead of copying its
+design/tasks into competing local records. Keep one active plan and execution
+controller. The local plan template connects purpose and criterion IDs to task
+scope, dependencies, and checks; `Task N` headings/checkboxes serve SDD when it
+is selected, while another controller keeps its native task format.
+
+The manifest's creation condition is necessary, not a command to invent a test
+cycle. Use a `tdd` record only for an actual warranted RED/GREEN cycle needing
+durable trace. Keep ordinary baseline/manual/refactoring verification in the
+existing work item or domain report. REFACTOR may be unnecessary; broader test
+suites depend on affected risk and project policy. Verification links actual
+criteria, observations, source revision, limits, and review dispositions.
+
+Before temporary domain records are removed, durable sources retain the needed
+applied requirements, derivations, decisions, evidence, review results, and
+continuation state. Disposable links alone are insufficient. Work-item
+archival preserves history; assignment DONE, criterion outcomes, technical
+review, Git commit success, and goal completion have separate meanings.

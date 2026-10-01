@@ -17,12 +17,21 @@ spec with normative requirements and verifiable scenarios. A proposal, design,
 and tasks without that spec are not a complete product plan. If the selected
 schema lacks a specs artifact or `skip_specs` would suppress a needed spec,
 report the schema/configuration problem instead of replacing the contract with
-a local plan. OpenSpec filenames and paths remain CLI-owned. Link this
-change from the configured work item through an available document workflow,
+a local plan. OpenSpec filenames and paths remain CLI-owned. Follow the
+project's work-history capture policy; a configured storage location does not
+enable capture. When that policy requires it, link this change from its owning
+work item through an available document workflow,
 or the project's local `.docs-schema` and ordinary file tools when none is
 installed. In parallel work, use the assigned child record when supported.
 
-**Planning boundary**: This workflow creates planning artifacts only. The user request that selected or triggered this workflow authorizes planning only, even if it asks to build or fix something. Do not edit project code. After the planning artifacts are complete, stop. Do not start implementation in the same response, even if the initial request asks for it. Wait for a new user request after the artifacts are presented; then start the apply workflow.
+**Planning boundary**: This workflow creates planning artifacts; the apply
+workflow owns implementation. If the user requested only a proposal or plan,
+present the artifacts and stop before implementation. If the current request
+already includes implementation, present the prepared artifacts and continue
+through the apply workflow within that authorization once required planning
+checks and project review gates are satisfied. Resolve a material unknown or
+required approval before dependent work. Do not require a new user request or
+repeat an approval that already covers the same scope.
 
 I'll create a change with the artifacts your schema defines. With the default spec-driven schema that is:
 - proposal.md (what & why)
@@ -32,7 +41,8 @@ I'll create a change with the artifacts your schema defines. With the default sp
 
 `<capability-path>` is the spec directory relative to `specs/` (for example, `user-auth` or `identity/user-auth`). Preserve an existing capability's full path and follow the project's established organization for new capabilities.
 
-When the user is ready to implement, they must start the apply workflow explicitly.
+Use the apply workflow for authorized implementation; invoking this planning
+skill alone does not authorize code changes or publication.
 
 ---
 
@@ -148,7 +158,11 @@ After completing all artifacts, summarize:
 - Change name and location
 - List of artifacts created with brief descriptions, plus any conditional artifact you skipped and why
 - What's ready: "All artifacts needed for implementation are ready."
-- Prompt: "The artifacts are ready for review. When you are ready, run `$openspec-apply-change (Codex) or /openspec-apply-change (other agents)` or ask me to apply this change."
+- For a planning-only request, show how to request implementation with
+  `$openspec-apply-change (Codex) or /openspec-apply-change (other agents)`.
+- If implementation is already authorized and no required gate remains,
+  announce the transition and continue through the apply workflow. Otherwise
+  identify the specific input or approval needed before proceeding.
 
 **Artifact Creation Guidelines**
 
@@ -162,7 +176,10 @@ After completing all artifacts, summarize:
   - These guide what you write, but should never appear in the output
 
 **Guardrails**
-- The request that invoked this workflow authorizes planning only. Any implementation or apply instruction in that request does not carry forward. Do NOT implement the change, start the apply workflow, or edit project code during this workflow. After presenting the artifacts, stop and wait for a new user request to start the apply workflow
+- Keep artifact creation in this workflow and implementation in the apply
+  workflow. Follow the existing request's scope and required project gates;
+  planning-only work stops at the artifacts, while authorized implementation
+  can continue without a new request.
 - Create every artifact the apply phase transitively depends on, not just the ids listed in `apply.requires`
 - Always read dependency artifacts before creating a new one - re-read from disk, not from conversation memory (files may have changed since you last saw them)
 - Ask about ambiguities that would materially change scope, externally observable behavior, compatibility, or acceptance criteria; for minor details, make reasonable assumptions and record them

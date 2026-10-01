@@ -1,13 +1,17 @@
 ---
 name: maintaining-work-records
-description: Use to append every request and discussion to its owning work item, manage linked local records and lifecycle, or manually compile a weekly report from authoritative sources.
+description: Use to capture requests and discussion under the project's history policy, manage linked local work records and lifecycle, or manually compile a weekly report from authoritative sources.
 ---
 
 # Maintaining Work Records
 
 ## Resolve the canonical repository
 
-Read project instructions and local configuration. Use exactly one configured
+Resolve storage, capture and persistence rules from effective project
+instructions or their existing configuration source. Use an optional local
+checkout-path override only for that same configured repository; unset/None
+values leave the shared setting in force. Preserve existing configuration
+without an automatic move or migration. Use exactly one configured
 document repository for work items, either the project repository or an
 existing document repository. In that repository, read
 `.docs-schema/manifest.json` and the relevant template. The bundled
@@ -17,16 +21,19 @@ skill is unavailable in a future session, project `AGENTS.md` and the local
 schema must still suffice with ordinary file tools. If the configured repository
 is inaccessible, expose the gap instead of creating a second work-item history.
 
-Do not create a document branch. Commit validated record updates on the
-repository's configured primary branch under its normal review and access
-policy. An independent clone checked out at that branch may isolate local
-changes without creating another branch. The document repository's Git history
-is the version history for its records. Private paths and sensitive contents
-must not be copied into public product docs or OpenSpec. In public artifacts,
-refer only to safe product facts or public identifiers.
-After a completed interaction or meaningful checkpoint, validate and commit
-the updated record on that branch so a later context can recover it from
-Git history. Sync to a configured remote under the repository's normal policy.
+Use the canonical repository's configured checkout, branch, review, and access
+policy. A dedicated document repository may explicitly require primary-branch
+record commits without document branches. Its Git workflow owns allocation and
+actual mutations. Product documentation accompanying code uses the code task's
+assigned checkout instead. Keep private paths and sensitive history out of
+public product docs or formal specs; use safe product facts or identifiers.
+Validate updates at the configured persistence checkpoint. When project policy
+calls for commits after interactions or other checkpoints, request the actual
+candidate/message review and authorized commit through its Git procedure;
+remote sync also follows that policy and existing authority. Installation alone
+does not authorize commits or publication. Record-only persistence uses checks
+for its actual artifact and does not restart an implementation finalization
+cycle. Preserve legitimate historical requests, decisions, and attribution.
 For parallel agents, follow
 [coordinating-parallel-document-work](../coordinating-parallel-document-work/SKILL.md)
 before editing the canonical repository. The current local schema determines
@@ -38,22 +45,40 @@ need one integrator.
 Find an existing root or child work item with `python3 .docs-schema/records.py
 list`, search, and generated tree relations when available. Keep one root per
 user topic and one child per independent delegated task under a graph-capable
-schema; each has its own manifest path. Append each request and discussion turn
+schema; each has its own manifest path. Follow the configured capture policy;
+under all-turn capture, append each request and discussion turn
 to its owning node in order with its timestamp, source
 role, concise content, and outcome. Also append actions, decisions, checks,
-corrections, branch events, and relevant links as they happen. Capture a short
-question too; no separate file is needed for each message. Keep the local
+corrections, branch events, and relevant links as they happen. All-turn capture
+includes short questions; no separate file is needed for each message. Keep the local
 template's current-state and next-action fields current, including goal,
 progress, code branch/SHA, governing contract or change, experiments, tests,
 and blockers. On context handoff,
-read the root and descendants plus their linked sources to reconstruct what was discussed,
-planned, implemented, verified, and left to do.
+the resuming work owner reads the relevant root/descendants and linked sources
+to reconstruct what was discussed, planned, implemented, verified, and left
+to do. Fresh assignees receive bounded relevant context from that owner.
+
+A child work item retains task history; it is not a brief, report, or ownership
+transfer. Link existing work/task/request IDs, spec revision and criteria,
+reports, findings and their dispositions when relevant. The assignment's
+requester retains responsibility; a handoff transfers only its named scope
+without requiring acknowledgement. Keep the same work identity and record the
+new owner, pending requests, reply destination, actual author, and consumed
+review/fix limits. A read-only assignee can return events to an authorized
+recorder; preserve authorship without expanding the assignee's write authority.
 
 Use the local manifest's `create_when`, allowed path, metadata, lifecycle, and
 required sections for a specialized local record. When registered, create a
 `decision` for a material choice, `design` for internal architecture, `plan`
 for internal tasks, and `tdd` for a durable test cycle trace only when
-warranted. Do not duplicate OpenSpec's design or task plan for the same scope.
+warranted. A TDD record requires an actual justified test cycle; a broad local
+creation condition is not a requirement to manufacture RED/GREEN evidence.
+Put baseline, manual, or refactoring verification in the existing work item or
+domain report when no TDD cycle applies. Reuse the selected active plan and
+governing design; a durable record must not become a competing plan or duplicate
+OpenSpec's artifacts for the same scope. Preserve the selected execution
+controller and its task format; use `Task N` extraction headings only when
+that controller requires them.
 Use `reference-note` for reusable sourced facts with validity bounds when that
 type is registered. For an unregistered type, first capture the request in the
 work item; update the local schema explicitly if the type is truly needed.
@@ -73,10 +98,12 @@ item links the governing artifacts and code SHA, not a competing contract.
 For research, preserve the experiment's own configured root and template and
 link its protocol, outcome, and evidence from the work item.
 
-When a code branch is merged, establish the actual target and merged SHA.
+When a code branch is merged, obtain the actual target and merged SHA from
+the Git owner; this skill does not perform integration.
 Compare adopted behavior with code, tests, and the governing contract. If
-OpenSpec owns it, sync only adopted requirements to the main specs, validate,
-then archive the completed change through the OpenSpec procedure. Append the
+OpenSpec owns it, forward any remaining sync/validation/archive to its owning
+procedure. Reuse an already verified transition; do not perform it twice.
+Only adopted requirements belong in main specs. Append the
 merge, checks, contract update, and next action to the work item. When a code
 branch is abandoned, record branch name, last SHA, reason, and useful decision
 or experiment links; do not adopt unmerged requirements. Preserve any change
@@ -93,6 +120,14 @@ change, evidence, blocker, and next action; update every field affected by the
 transition. If progress says the goal is finished while a blocker or next
 action still describes unfinished work within that goal or its required
 finalization, either correct those fields or keep the item active or deferred.
+Keep assignment DONE, criterion MET/NOT_MET/NOT_VERIFIED, review dispositions,
+work-item lifecycle, commit success, and integration readiness distinct. The
+invoking workflow owns technical review schedules and retry limits; recording
+a result cannot waive an unresolved blocker. Before temporary development
+records are disposed of, durable sources must retain the necessary applied
+requirements, derivations, decisions, review outcomes, evidence, and unresolved
+continuation state. Links to files being removed are insufficient. The domain
+owner decides temporary retention; archival here preserves history.
 Track a separate follow-up in its own work item. Run schema validation after
 this review, but do not treat a structural pass as proof that the prose is
 factually current.
@@ -127,6 +162,7 @@ and source before changing its summary; retain the correction history.
 Run `python3 .docs-schema/records.py validate` and use `list` to discover
 records. Fix missing fields, orphan links, and stale state. For a schema update,
 increment `schema_version`, explicitly migrate affected records, validate, and
-commit the schema and migration together. Do not auto-rename legacy experiment
+persist the schema and migration together through the project's reviewed,
+authorized Git procedure. Do not auto-rename legacy experiment
 files or promote old notes wholesale into OpenSpec; review each
 against accepted product behavior first.

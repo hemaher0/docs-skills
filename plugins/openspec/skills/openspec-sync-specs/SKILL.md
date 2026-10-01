@@ -15,7 +15,9 @@ Before syncing after a code branch merge, establish the actual merged SHA and
 compare the selected delta requirements with implementation and tests. Sync
 only accepted, implemented behavior. For an abandoned code branch, do not sync
 unadopted requirements; preserve the change and its work-item history instead.
-Append the sync decision and resulting main-spec links to the configured work
+Follow the project's work-history capture policy; a configured storage
+location does not enable capture. When that policy requires it, append the
+sync decision and resulting main-spec links to the owning work
 item through docs-skills when available or local `.docs-schema` and normal file
 tools otherwise. Keep OpenSpec CLI-selected paths and native filenames.
 

@@ -18,7 +18,9 @@ If the selected schema has no needed spec artifact, or it is skipped or empty,
 surface the configuration/contract gap instead of treating proposal, design,
 or tasks as the behavior contract. For a bug that violates an existing main
 spec, verify that contract directly. Compare code and tests to the applicable
-spec. Keep the configured work-item timeline linked and current through an
+spec. Follow the project's work-history capture policy; a configured storage
+location does not enable capture. When that policy requires it, keep the owning
+work-item timeline linked and current through an
 available document workflow; otherwise use local `.docs-schema` and normal
 file tools. In parallel work, use the assigned child record when supported by
 that schema. Do not create a document branch.

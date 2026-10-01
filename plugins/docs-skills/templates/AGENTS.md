@@ -1,18 +1,40 @@
-# Project document workflow
+# Project Documentation Configuration
 
-For every request and discussion, find its owning work item in the configured canonical document repository or create one from its local `.docs-schema` template. Keep one root per user topic and, when the local schema supports it, one child per independently delegated task. Append each request, important reasoning and decision, action, result, and correction in time order to that node. Keep the current goal, evidence links, code branch/SHA, and next action current, so a later agent can reconstruct the work after context replacement. Do not create one file per message.
+<!-- Merge only project choices not already governed by an existing source.
+Shared procedures belong to their skills and the authoritative local schema.
+Omit unused/default fields; preserve existing settings. Local filesystem
+overrides go in AGENTS.local.md only when needed. -->
 
-Choose exactly one canonical work-item repository in `AGENTS.local.md`: this project repository or an existing document repository. Keep private records, paths, and sensitive content out of public OpenSpec and product documentation. If the configured repository is unavailable, report the missing source; do not silently start a second work-item history elsewhere. Use its configured primary branch for document commits; document work never creates a new branch.
-Validate and commit work-item updates after a completed interaction or meaningful checkpoint so Git history can restore the sequence after context replacement. Follow the document repository's remote sync and access policy.
-When agents work in parallel and the local schema supports `parent_work_item_id`, assign a distinct dated child work-item ID and path to each independent task before dispatch. The child points to its parent; workers edit only their own child and task-specific records, and the coordinator owns the root. Do not edit a parent merely to add a backlink. Use `python3 .docs-schema/records.py tree --work-item <id>` to read the root and descendants. If the local schema is older, one designated writer integrates worker handoffs until an explicit migration.
-Prefer independent clones on the configured primary branch for parallel child records; workers commit only their own child locally and the coordinator imports those commits before pushing. In a shared checkout, workers edit disjoint child files but do not stage, commit, or push its Git index; the coordinator waits for stable handoffs before repository-wide validation and commit. Assign one writer to every overlapping OpenSpec, experiment, report, or other artifact. If another writer or the remote changes an overlapping file, reconcile and validate again; never overwrite an earlier snapshot or force-push it. Apply this rule with ordinary file tools when no document plugin is installed.
-Before completing or archiving a work item, compare its current goal, progress, branch/SHA, contract state, evidence, blocker, and next action with the latest timeline event and linked sources. Update stale fields before committing; schema validation checks structure and cannot establish factual freshness.
-When reviewing a work item, compare exact values written in the record, including earlier timeline events, with linked sources. Preserve a mistaken event and append a dated correction with the old value, new value, and source; do not claim the record matches merely because source artifacts agree with each other.
+## Documentation
 
-Read the chosen repository's `.docs-schema/manifest.json` and type template before writing a local record. Run `python3 .docs-schema/records.py validate` after edits; use `list` for generated discovery. The repository-local schema wins over the plugin's bundled starter. If `docs-skills` is not installed, follow this same procedure with ordinary file tools. If the local schema is absent, install the bundled starter into the chosen repository as an explicit setup change before creating registered records; do not invent a parallel schema.
+- Documentation conventions/configuration source: `<existing guide or configuration>`
+- Reference notes root, if not owned by the local schema: `<project-relative location or existing store reference>`
+- Reference storage boundary, if explicitly designated: `<project audience/policy reference>`
 
-Use a `work-item` for all requests and discussions, choosing the root or assigned child as the event owner. Create a `decision`, `design`, `plan`, or `tdd` only when its registered creation condition is met. Use the schema's paths for those records and reusable sourced notes. A weekly report is created only on manual request; use the local schema's registered path, timezone, and week start. Do not create unregistered types, directories, or manual index files. Record an unregistered document request in the owning work item first; change the versioned schema explicitly if a new type is needed.
+## Work Records (when configured)
 
-For product behavior, OpenSpec is the contract: read its current main spec before planning. Use the CLI-selected root, schema, and artifact paths. A changed or missing contract needs a delta spec with testable requirements and scenarios. Do not treat a proposal, design, or task list without a required spec as a complete product plan. A defect that violates an existing spec is tested against that spec. If OpenSpec is not configured or the selected schema cannot produce the needed spec, expose the setup problem rather than substituting a local plan. Keep OpenSpec's native filenames. For research, use research-skills when installed or the project's configured experiment workflow; link its evidence from the work item.
+- Work-history capture policy: `<All requests and discussions, established project rule, or Disabled>`
+- Canonical work-item repository: `<this project, one shared repository reference, or None>`
+- Work-record audience: `<established audience/access policy>`
+- Record persistence policy: `<chosen checkpoints and existing Git procedure, or local files only>`
 
-When a code branch merges, check its actual merged SHA, implementation, tests, and governing contract. For an OpenSpec change, sync only adopted requirements to the main spec and archive the change through its procedure. When a code branch is abandoned, do not adopt unmerged requirements; preserve useful discussion and research evidence and archive the work item's history. `archived` means retained history, not an obsolete claim. Update the work item after either event. Review legacy notes against implemented and accepted behavior before moving only adopted product requirements into OpenSpec; do not bulk promote notes into specs.
+Resolve the same configured repository for this work; a local checkout-path
+override must not create a second history. Follow its own Git/access policy.
+Product docs accompanying code use the assigned code checkout.
+
+Read the canonical repository's local `.docs-schema/README.md`,
+`manifest.json` and relevant template for record operations; `LIFECYCLE.md`
+governs its registered state transitions. These local sources remain usable
+with ordinary file tools if the plugin is unavailable. Preserve existing local
+schemas until explicit migration.
+
+Development/research owners supply governing content, criteria, revision,
+evidence, and decisions. Documentation skills own placement, record edits,
+reader-facing prose, and factual audits; the selected domain workflow keeps
+scheduling, technical verdicts, and temporary retention. Formal contracts
+follow the project's designated owner. Git owns actual checkout and history
+mutations. Current owners, handoffs, findings and progress live in their work
+records rather than configuration.
+
+Read root `AGENTS.local.md` when selected local overrides are present. They
+cannot broaden the shared capture, persistence, audience, or permission policy.

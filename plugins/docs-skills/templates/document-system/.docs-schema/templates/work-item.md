@@ -12,10 +12,13 @@ updated_at: "{{timestamp_with_offset}}"
 ## Current state
 
 - Goal:
+- Current work owner and work/task/request identity mapping:
 - Progress:
 - Code branch and SHA:
 - Product contract / OpenSpec link, if applicable:
+- Working spec revision, criteria and selected active plan:
 - Evidence links:
+- Review findings and dispositions, when relevant:
 - Blocker or uncertainty:
 
 ## Timeline
@@ -27,7 +30,10 @@ updated_at: "{{timestamp_with_offset}}"
 - Evidence:
 - Code SHA or command result, if applicable:
 
-<!-- Append every request, discussion turn, decision, agent action, result, and correction in time order. Use a short accurate paraphrase; preserve essential quotes when needed. -->
+<!-- Append events required by the configured capture policy in time order.
+All-turn capture includes each request/discussion, action, decision, result,
+and correction. Preserve actual authorship when another writer records an
+event. Use an accurate paraphrase and preserve essential quotes when needed. -->
 
 ## Related records
 

@@ -11,6 +11,11 @@ metadata:
 
 Archive a completed change in the experimental workflow.
 
+Work-item updates below follow the project's work-history capture policy;
+a configured storage location does not enable capture. Requested spec sync,
+archive operations, and preservation of native change artifacts do not depend
+on enabling work-item history.
+
 For an adopted change after a code branch merge, verify the actual merge SHA,
 implementation, tests, and selected delta requirements; sync only adopted
 requirements and verify the main specs before archive. For an abandoned code

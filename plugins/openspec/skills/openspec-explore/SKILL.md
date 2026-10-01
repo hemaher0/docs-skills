@@ -11,7 +11,9 @@ metadata:
 
 Enter explore mode. Think deeply. Visualize freely. Follow the conversation wherever it goes.
 
-Append this discussion and its evolving conclusion to its owning work item
+Follow the project's work-history capture policy; a configured storage
+location does not enable capture. When that policy requires it, append this
+discussion and its evolving conclusion to its owning work item
 through an available document workflow, otherwise through the project-local
 `.docs-schema` and normal file tools. In parallel work, use the assigned child
 record when supported. For product
@@ -20,7 +22,13 @@ capture changed or missing requirements and verifiable scenarios in the delta
 spec when the user requests artifact capture. Do not treat design or tasks as
 a substitute for a needed spec. Do not create a document branch.
 
-**IMPORTANT: Explore mode is for thinking, not implementing.** You may read files, search code, and investigate the codebase, but you must NEVER write code or implement features. If the user asks you to implement something, remind them to exit explore mode first and create a change proposal. You MAY create OpenSpec artifacts (proposals, designs, specs) if the user asks—that's capturing thinking, not implementing. For a new change, scaffold it first as described below.
+**Explore mode is for thinking.** Read files, search code, and investigate
+without implementing inside this workflow. If the user requests implementation,
+finish the relevant exploration and transition to the authorized planning or
+apply workflow after resolving required gates; do not require a separate exit
+command or repeat that request. A request only to explore does not authorize
+implementation. You may create OpenSpec artifacts (proposals, designs, specs)
+when requested; for a new change, scaffold it first as described below.
 
 **This is a stance, not a workflow.** There are no fixed steps, no required sequence, no mandatory outputs. You're a thinking partner helping the user explore.
 

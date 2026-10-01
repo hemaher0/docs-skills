@@ -4,17 +4,19 @@ A Codex plugin marketplace with two independently installable plugins:
 
 | Plugin | Role |
 | --- | --- |
-| [docs-skills](plugins/docs-skills/.codex-plugin/plugin.json) | Route all document work and preserve request history in a local document schema. |
+| [docs-skills](plugins/docs-skills/.codex-plugin/plugin.json) | Route document work and preserve history when the project's work-record policy is configured. |
 | [openspec](plugins/openspec/.codex-plugin/plugin.json) | Explore, plan, implement, synchronize, and archive OpenSpec changes. |
 
 ## Install and configure
 
-Installing the plugin makes its skills available. **Recording work history
-requires the project setup below.**
+Install the selected plugin and configure applicable project settings using
+the steps below. Recording work history requires a chosen canonical repository
+and local schema; reader-facing document work can use existing project rules.
 
 ### 1. Install for a project
 
-Use a repository marketplace and project configuration. Run these commands from
+Use a repository marketplace and project configuration. Reuse a suitable source
+checkout when present. For a first setup, run these commands from
 the **target project's root**, with Git access to this repository:
 
 ```bash
@@ -83,34 +85,69 @@ loaded only for trusted projects. The marketplace source and enablement belong
 to this project; Codex may still store installed copies in its shared cache.
 See the [official repository marketplace and project configuration guide](https://developers.openai.com/plugins/build/plugins).
 
-### 2. Configure each project that needs work records
+### 2. Configure project instructions
 
-1. Choose **one canonical work-item repository**: the project repository or
-   an existing document repository. Follow its access policy and use its
-   configured primary branch; do not create document branches.
-2. In the chosen document repository, copy the entire
+Read existing instructions and the
+[project settings template](plugins/docs-skills/templates/AGENTS.md). Keep shared
+capture/persistence/audience choices in effective project instructions or their
+existing policy home. Keep documentation conventions, generated sources and
+check commands in their existing guide/native configuration, linking them
+when discovery needs a pointer. Record types, paths and validation belong to
+the local `.docs-schema`; formal-store settings belong to that tool's configuration.
+Omit defaults, duplicate procedures and facts already discoverable there.
+
+Use the [local override template](plugins/docs-skills/templates/AGENTS.local.md)
+only for a necessary local path to the same configured external record/reference
+store. A local file is not required when project settings resolve the locations.
+Preserve existing values and other sections; fill selected overrides without
+duplicating project policy. When a local file is used, ensure effective root
+instructions (`AGENTS.md`, or `AGENTS.override.md` when it takes precedence)
+include an equivalent of:
+
+```markdown
+Read and follow root AGENTS.local.md when it exists.
+```
+
+Inspect repository facts and reuse established choices first. Confirm unresolved
+consequential choices with the project owner: whether to enable work history, its one canonical
+repository and audience, capture and persistence policy, or a formal-contract
+owner. Plugin availability alone does not select OpenSpec, a history repository,
+commits after every turn, or remote
+sync. If history is not selected, record `Disabled`/`None` for those settings
+or omit them; reader-facing documentation still works. Keep required pending
+decisions visible and finish independent setup while those choices are pending.
+
+### 3. Set up work records when selected
+
+1. Choose **one canonical work-item repository**: this project or one existing
+   document repository. Keep its shared identity, audience, capture policy and
+   persistence checkpoints in project instructions or their existing source.
+   An optional local path resolves the same external repository. Reuse
+   established settings. Its Git procedure controls checkout/branch allocation, reviewed
+   commits and publication; a dedicated record repository can explicitly
+   choose primary-branch commits without document branches.
+2. In the chosen repository, copy the entire
    [starter `.docs-schema/`](plugins/docs-skills/templates/document-system/.docs-schema/README.md)
    directory **only if no local `.docs-schema/` exists**. Find it under
    `.agents/vendor/docs-skills/plugins/docs-skills/templates/document-system/`
-   in the target project. Commit the copied schema in the chosen repository.
-   If an older local schema already exists, follow its
+   in the target project. Review/persist it under the chosen repository's Git
+   policy and existing authority. If an older local schema already exists,
+   keep it authoritative. Adopt its
    [explicit version 2 migration](plugins/docs-skills/templates/document-system/.docs-schema/README.md)
-   before using linked child work items.
-3. In the **project root**, merge the
-   [project `AGENTS.md` template](plugins/docs-skills/templates/AGENTS.md)
-   into `AGENTS.md` without overwriting existing rules. Create or update
-   `AGENTS.local.md` from the
-   [local configuration template](plugins/docs-skills/templates/AGENTS.local.md)
-   and fill in its work-record settings. If the document repository is
-   separate, configure its absolute path here.
-4. From the chosen document repository, run:
+   only when that format change is requested; until then use one record writer
+   if its schema lacks child nodes. Installation does not migrate local records.
+3. From the chosen document repository, run:
 
    ```bash
    python3 .docs-schema/records.py validate
    ```
 
-Start a new Codex session after installation and project setup. Installation
-does not copy templates or choose a work-item repository for you.
+Verify actual marketplace paths/name, effective configuration sources, and
+configured locations; validate the schema only when records are configured.
+Start a new session to check skill availability and resolved settings. Report
+which features are configured and which are intentionally disabled or still
+need a decision. Keep skill availability distinct from readiness of features
+that require project settings.
 
 ## Update or remove from a project
 
@@ -136,7 +173,7 @@ once neither plugin needs it.
 
 | Skill | Role |
 | --- | --- |
-| [using-docs-skills](plugins/docs-skills/skills/using-docs-skills/SKILL.md) | Locate the owning work-item node for every request and route document work to its owner. |
+| [using-docs-skills](plugins/docs-skills/skills/using-docs-skills/SKILL.md) | Route documents to their owners and find work-item nodes under configured history capture. |
 | [coordinating-parallel-document-work](plugins/docs-skills/skills/coordinating-parallel-document-work/SKILL.md) | Give parallel tasks linked child records and integrate them without competing writes. |
 | [maintaining-work-records](plugins/docs-skills/skills/maintaining-work-records/SKILL.md) | Maintain work-item timelines, specialized local records, lifecycle, and manually requested weekly reports. |
 | [auditing-documentation](plugins/docs-skills/skills/auditing-documentation/SKILL.md) | Compare documentation claims with current sources without changing files. |
@@ -149,6 +186,16 @@ controls record types, paths, templates, and validation; it works with ordinary
 file tools when this plugin is unavailable. The schema also documents its
 [template sources](plugins/docs-skills/templates/document-system/.docs-schema/TEMPLATE_SOURCES.md).
 
+Development owns intent, necessary derived requirements, the active spec/plan,
+execution and technical review. Documentation owns placement, durable history,
+reader-facing edits and factual audits. Git owns actual checkouts, content/message
+review, authorization and mutations. Product docs accompany code in its assigned
+checkout; work records follow their configured repository/schema and audience.
+Linked child work items retain history and do not replace briefs/reports or
+transfer responsibility. One active plan and execution controller govern a
+scope. Preserve accepted requirements, decisions, review outcomes and covering
+evidence durably before the domain owner disposes of temporary records.
+
 ## OpenSpec
 
 | Skill | Role |
@@ -160,7 +207,11 @@ file tools when this plugin is unavailable. The schema also documents its
 | [openspec-sync-specs](plugins/openspec/skills/openspec-sync-specs/SKILL.md) | Sync a change's delta specs into the main specs. |
 | [openspec-archive-change](plugins/openspec/skills/openspec-archive-change/SKILL.md) | Archive a completed change. |
 
-OpenSpec owns product behavior contracts; work items link its artifacts. The
+When the project designates OpenSpec, it owns product behavior contracts and
+native change artifacts; work items link them. Otherwise follow the existing
+project contract process. Select one execution controller for its active tasks;
+do not run OpenSpec apply and another implementation controller for the same
+scope simultaneously. The
 plugin supplies skills but not the CLI. Follow the
 [official OpenSpec installation guide](https://github.com/Fission-AI/OpenSpec/blob/main/docs/installation.md).
 For a new project, `openspec init --tools none` avoids generating a second set
