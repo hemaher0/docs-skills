@@ -6,9 +6,8 @@ description: Use to route repository document discovery, writing, placement, man
 # Using Docs Skills
 
 Read effective project instructions and their referenced configuration. Read
-`AGENTS.local.md` only when present or explicitly required for a local override.
-Shared capture, persistence, audience and document rules do not require that
-file. When history capture is
+root `AGENTS.local.md` when it exists. Shared capture, persistence, audience
+and document rules stay in their existing policy sources. When history capture is
 configured, follow that policy, locate the canonical work-item repository and
 its local `.docs-schema/manifest.json`, and find the owning node by subject and
 links. Append to it or create one from the local template. The local schema
@@ -16,10 +15,15 @@ wins over this plugin's bundled starter. Report a missing required source
 without silently creating a second history. Reader-facing document work that
 does not require work records can proceed under its own project rules.
 Installation alone does not enable history capture. For a requested install
-or setup, use the [project settings template](../../templates/AGENTS.md), the
-[optional local overrides](../../templates/AGENTS.local.md), and the source
-README when available; preserve existing settings and resolve
-consequential unknowns with the user. Use
+or setup, read the [project settings template](../../templates/AGENTS.md), the
+[local configuration template](../../templates/AGENTS.local.md), and the source
+README when available. Create or merge root `AGENTS.local.md` even when no local
+overrides are needed, recording that outcome explicitly. Connect it through
+existing `AGENTS.md`; when absent, recommend a relative `AGENTS.md` symlink to
+the local file. Respect effective `AGENTS.override.md` precedence and avoid
+self-references. Preserve existing settings and resolve consequential unknowns
+with the user; an unresolved choice is not an unnecessary setting. Ordinary
+document work does not initialize installation configuration. Use
 [maintaining-work-records](../maintaining-work-records/SKILL.md)
 for configured capture and local record types.
 

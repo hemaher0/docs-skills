@@ -87,7 +87,8 @@ See the [official repository marketplace and project configuration guide](https:
 
 ### 2. Configure project instructions
 
-Read existing instructions and the
+Create or update root `AGENTS.local.md` during every installation, even without
+a separate request for the file. Read existing instructions and the
 [project settings template](plugins/docs-skills/templates/AGENTS.md). Keep shared
 capture/persistence/audience choices in effective project instructions or their
 existing policy home. Keep documentation conventions, generated sources and
@@ -96,17 +97,31 @@ when discovery needs a pointer. Record types, paths and validation belong to
 the local `.docs-schema`; formal-store settings belong to that tool's configuration.
 Omit defaults, duplicate procedures and facts already discoverable there.
 
-Use the [local override template](plugins/docs-skills/templates/AGENTS.local.md)
-only for a necessary local path to the same configured external record/reference
-store. A local file is not required when project settings resolve the locations.
-Preserve existing values and other sections; fill selected overrides without
-duplicating project policy. When a local file is used, ensure effective root
-instructions (`AGENTS.md`, or `AGENTS.override.md` when it takes precedence)
-include an equivalent of:
+Read the [local configuration template](plugins/docs-skills/templates/AGENTS.local.md)
+and merge its documentation section into `AGENTS.local.md`. Fill only necessary
+local paths to the same configured external record/reference store. If no local
+overrides are needed, write `Local overrides: None. Use effective project settings and skill defaults.`
+in that section. Remove unused template fields; preserve existing values and
+other packages' sections without duplicating shared policy or defaults.
+
+Connect the local file to root instructions. If `AGENTS.md` exists, preserve it
+and add the following instruction unless it already reads or resolves to the
+local file:
 
 ```markdown
 Read and follow root AGENTS.local.md when it exists.
 ```
+
+If `AGENTS.md` is absent, the recommended connection is a relative symbolic
+link created from the project root, after writing `AGENTS.local.md`:
+
+```bash
+ln -s AGENTS.local.md AGENTS.md
+```
+
+Preserve existing files and links; do not replace them or add a self-reference
+to a linked local file. If `AGENTS.override.md` takes precedence, ensure it also
+reads the local file. Verify the effective connection, including link targets.
 
 Inspect repository facts and reuse established choices first. Confirm unresolved
 consequential choices with the project owner: whether to enable work history, its one canonical
@@ -116,6 +131,7 @@ commits after every turn, or remote
 sync. If history is not selected, record `Disabled`/`None` for those settings
 or omit them; reader-facing documentation still works. Keep required pending
 decisions visible and finish independent setup while those choices are pending.
+An unresolved choice is pending, not evidence that a setting is unnecessary.
 
 ### 3. Set up work records when selected
 
@@ -142,12 +158,16 @@ decisions visible and finish independent setup while those choices are pending.
    python3 .docs-schema/records.py validate
    ```
 
-Verify actual marketplace paths/name, effective configuration sources, and
-configured locations; validate the schema only when records are configured.
+Before declaring installation complete, verify that `AGENTS.local.md` contains
+the resolved documentation settings or the explicit no-override declaration,
+has no unused placeholders, and is read through effective root instructions.
+Verify actual marketplace paths/name, configuration sources, and configured
+locations; validate the schema only when records are configured.
 Start a new session to check skill availability and resolved settings. Report
 which features are configured and which are intentionally disabled or still
-need a decision. Keep skill availability distinct from readiness of features
-that require project settings.
+need a decision. Required unresolved choices remain pending; skill availability
+alone does not complete configuration or establish readiness of features that
+require project settings.
 
 ## Update or remove from a project
 

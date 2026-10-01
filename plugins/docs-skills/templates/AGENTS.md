@@ -36,5 +36,5 @@ follow the project's designated owner. Git owns actual checkout and history
 mutations. Current owners, handoffs, findings and progress live in their work
 records rather than configuration.
 
-Read root `AGENTS.local.md` when selected local overrides are present. They
-cannot broaden the shared capture, persistence, audience, or permission policy.
+Read and follow root `AGENTS.local.md` when it exists. Local overrides cannot
+broaden the shared capture, persistence, audience, or permission policy.
