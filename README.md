@@ -87,87 +87,74 @@ See the [official repository marketplace and project configuration guide](https:
 
 ### 2. Configure project instructions
 
-Create or update root `AGENTS.local.md` during every installation, even without
-a separate request for the file. Read existing instructions and the
-[project settings template](plugins/docs-skills/templates/AGENTS.md). Keep shared
-capture/persistence/audience choices in effective project instructions or their
-existing policy home. Keep documentation conventions, generated sources and
-check commands in their existing guide/native configuration, linking them
-when discovery needs a pointer. Record types, paths and validation belong to
-the local `.docs-schema`; formal-store settings belong to that tool's configuration.
-Omit defaults, duplicate procedures and facts already discoverable there.
+Writing root `AGENTS.local.md` is a required installation step.
 
-Read the [local configuration template](plugins/docs-skills/templates/AGENTS.local.md)
-and merge its documentation section into `AGENTS.local.md`. Fill only necessary
-local paths to the same configured external record/reference store. If no local
-overrides are needed, write `Local overrides: None. Use effective project settings and skill defaults.`
-in that section. Remove unused template fields; preserve existing values and
-other packages' sections without duplicating shared policy or defaults.
+1. Read existing project instructions, the
+   [project settings template](plugins/docs-skills/templates/AGENTS.md) and the
+   [local configuration template](plugins/docs-skills/templates/AGENTS.local.md).
+   Create the local file from the template, or merge its documentation section
+   into the existing file. Preserve established settings and other packages' sections.
+2. Replace applicable placeholders with actual values. For work records, fill
+   the one canonical repository, audience, capture policy and persistence policy.
+   For reference notes, fill the configured location and storage boundary.
+   Fill local checkout/path overrides when used.
+3. Keep shared choices in effective project instructions or their existing
+   policy home. Documentation conventions and check commands stay in their
+   guide/native configuration; record types and paths stay in the local
+   `.docs-schema`; formal-store settings stay in that tool's configuration.
+   Reference actual sources where settings already exist and verify their
+   contents. The workflow entrypoint is
+   [using-docs-skills](plugins/docs-skills/skills/using-docs-skills/SKILL.md).
+4. Remove fields for features the project does not use. `Disabled`/`None`
+   denotes an unused feature, not a missing value. Required unset values keep
+   configuration incomplete; a generic "use defaults" statement does not
+   configure a repository or storage location.
+5. Connect the local file to root instructions using the procedure below.
 
-Connect the local file to root instructions. If `AGENTS.md` exists, preserve it
-and add the following instruction unless it already reads or resolves to the
-local file:
+If root `AGENTS.md` exists, preserve it and add this instruction unless it
+already reads or resolves to the local file:
 
 ```markdown
 Read and follow root AGENTS.local.md when it exists.
 ```
 
 If `AGENTS.md` is absent, the recommended connection is a relative symbolic
-link created from the project root, after writing `AGENTS.local.md`:
+link from the project root, after writing `AGENTS.local.md`:
 
 ```bash
 ln -s AGENTS.local.md AGENTS.md
 ```
 
-Preserve existing files and links; do not replace them or add a self-reference
-to a linked local file. If `AGENTS.override.md` takes precedence, ensure it also
-reads the local file. Verify the effective connection, including link targets.
+Preserve existing files and links and avoid self-references. If
+`AGENTS.override.md` takes precedence, ensure it reads the local file.
 
-Inspect repository facts and reuse established choices first. Confirm unresolved
-consequential choices with the project owner: whether to enable work history, its one canonical
-repository and audience, capture and persistence policy, or a formal-contract
-owner. Plugin availability alone does not select OpenSpec, a history repository,
-commits after every turn, or remote
-sync. If history is not selected, record `Disabled`/`None` for those settings
-or omit them; reader-facing documentation still works. Keep required pending
-decisions visible and finish independent setup while those choices are pending.
-An unresolved choice is pending, not evidence that a setting is unnecessary.
+### 3. Set up work records when used
 
-### 3. Set up work records when selected
+Use **one canonical work-item repository**: this project or one existing
+document repository. Preserve its configured identity, audience, capture and
+persistence rules. A local checkout override resolves that same repository.
+Follow its Git/access policy; installing the plugin does not select commits
+after every turn or remote sync.
 
-1. Choose **one canonical work-item repository**: this project or one existing
-   document repository. Keep its shared identity, audience, capture policy and
-   persistence checkpoints in project instructions or their existing source.
-   An optional local path resolves the same external repository. Reuse
-   established settings. Its Git procedure controls checkout/branch allocation, reviewed
-   commits and publication; a dedicated record repository can explicitly
-   choose primary-branch commits without document branches.
-2. In the chosen repository, copy the entire
+1. In the chosen repository, copy the entire
    [starter `.docs-schema/`](plugins/docs-skills/templates/document-system/.docs-schema/README.md)
-   directory **only if no local `.docs-schema/` exists**. Find it under
+   directory **only if no local `.docs-schema/` exists**. It is under
    `.agents/vendor/docs-skills/plugins/docs-skills/templates/document-system/`
-   in the target project. Review/persist it under the chosen repository's Git
-   policy and existing authority. If an older local schema already exists,
-   keep it authoritative. Adopt its
-   [explicit version 2 migration](plugins/docs-skills/templates/document-system/.docs-schema/README.md)
-   only when that format change is requested; until then use one record writer
-   if its schema lacks child nodes. Installation does not migrate local records.
-3. From the chosen document repository, run:
+   in this setup. Keep an existing local schema authoritative; installation
+   does not migrate it. Adopt the documented version 2 migration only for a
+   requested format change. Use one record writer if the schema lacks child nodes.
+2. From the chosen document repository, run:
 
    ```bash
    python3 .docs-schema/records.py validate
    ```
 
-Before declaring installation complete, verify that `AGENTS.local.md` contains
-the resolved documentation settings or the explicit no-override declaration,
-has no unused placeholders, and is read through effective root instructions.
-Verify actual marketplace paths/name, configuration sources, and configured
-locations; validate the schema only when records are configured.
-Start a new session to check skill availability and resolved settings. Report
-which features are configured and which are intentionally disabled or still
-need a decision. Required unresolved choices remain pending; skill availability
-alone does not complete configuration or establish readiness of features that
-require project settings.
+Before completing installation, read the completed `AGENTS.local.md` and its
+referenced configuration. Verify that applicable values are filled, no
+placeholders remain, configured paths resolve, and effective instructions read
+the local file. Validate the schema when work records are used. Check actual
+marketplace paths/name and skill availability in a new session. Report the
+configured features and any incomplete setup.
 
 ## Update or remove from a project
 
