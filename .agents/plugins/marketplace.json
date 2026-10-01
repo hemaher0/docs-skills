@@ -1,0 +1,32 @@
+{
+  "name": "hemaher0-docs-skills",
+  "interface": {
+    "displayName": "Hemaher0 Docs Skills"
+  },
+  "plugins": [
+    {
+      "name": "docs-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/docs-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "openspec",
+      "source": {
+        "source": "local",
+        "path": "./plugins/openspec"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

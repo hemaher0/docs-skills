@@ -1,0 +1,64 @@
+{
+  "schema_version": 2,
+  "timezone": "Asia/Seoul",
+  "week_start": "monday",
+  "types": {
+    "work-item": {
+      "path": "references/work-items/{id}/{id}-work-item.md",
+      "template": "templates/work-item.md",
+      "create_when": "Create one root for each user topic and one linked child for each independent delegated task; append later events to the owning record.",
+      "required_sections": ["Current state", "Timeline", "Related records", "Next action"],
+      "lifecycles": ["active", "deferred", "completed", "archived"],
+      "work_item_required": false
+    },
+    "decision": {
+      "path": "references/work-items/{work_item_id}/{id}.md",
+      "template": "templates/decision.md",
+      "create_when": "A consequential choice needs alternatives, rationale, and traceable outcome.",
+      "required_sections": ["Context", "Decision drivers", "Options", "Decision", "Rationale", "Consequences", "Confirmation"],
+      "lifecycles": ["pending", "adopted", "rejected", "archived"],
+      "work_item_required": true
+    },
+    "design": {
+      "path": "references/work-items/{work_item_id}/{id}.md",
+      "template": "templates/design.md",
+      "create_when": "Internal design needs durable explanation and OpenSpec does not govern the same scope.",
+      "required_sections": ["Goal and constraints", "Alternatives", "Design", "Risks and migration", "Open questions"],
+      "lifecycles": ["draft", "adopted", "archived"],
+      "work_item_required": true
+    },
+    "plan": {
+      "path": "references/work-items/{work_item_id}/{id}.md",
+      "template": "templates/plan.md",
+      "create_when": "Internal execution needs durable tasks and OpenSpec does not govern the same scope.",
+      "required_sections": ["Goal", "Tasks", "Verification", "Progress"],
+      "lifecycles": ["active", "deferred", "completed", "archived"],
+      "work_item_required": true
+    },
+    "tdd": {
+      "path": "references/work-items/{work_item_id}/{id}.md",
+      "template": "templates/tdd.md",
+      "create_when": "The test cycle or acceptance evidence needs a durable trace beyond the work-item timeline.",
+      "required_sections": ["Behavior and specification", "Test cases", "RED", "GREEN", "REFACTOR", "Verification"],
+      "lifecycles": ["active", "completed", "archived"],
+      "work_item_required": true
+    },
+    "reference-note": {
+      "path": "references/reference-notes/{id}.md",
+      "template": "templates/reference-note.md",
+      "create_when": "A sourced fact or method is reusable across work items and its validity can be stated.",
+      "required_sections": ["Question", "Verified facts", "Interpretation and reuse", "Sources", "Validity and review"],
+      "lifecycles": ["current", "archived"],
+      "work_item_required": false
+    },
+    "weekly-report": {
+      "path": "references/weekly-reports/{id}.md",
+      "template": "templates/weekly-report.md",
+      "create_when": "A user manually requests a weekly summary for a Monday-to-Monday Asia/Seoul period.",
+      "required_sections": ["Summary", "Completed", "In progress", "Decisions and evidence", "Deferred and blocked", "Next actions", "Sources", "Corrections"],
+      "lifecycles": ["draft", "final"],
+      "work_item_required": false,
+      "required_fields": ["period_start", "period_end", "as_of"]
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "name": "openspec",
+  "version": "1.8.0",
+  "description": "Spec-driven proposal, planning, implementation, synchronization, and archive workflows for OpenSpec changes.",
+  "author": {
+    "name": "OpenSpec"
+  },
+  "repository": "https://github.com/hemaher0/docs-skills",
+  "license": "MIT",
+  "keywords": [
+    "openspec",
+    "spec-driven-development",
+    "proposal",
+    "planning",
+    "change-management"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "OpenSpec",
+    "shortDescription": "Spec-driven change workflows",
+    "longDescription": "Use OpenSpec to explore changes, create and update proposals, apply tasks, synchronize specifications, and archive completed work.",
+    "developerName": "OpenSpec",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Create an OpenSpec proposal for this change.",
+      "Apply the active OpenSpec change."
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "docs-skills",
+  "version": "0.1.0",
+  "description": "Route and maintain repository documentation, diagrams, and reference notes.",
+  "author": {
+    "name": "hemaher0",
+    "url": "https://github.com/hemaher0"
+  },
+  "repository": "https://github.com/hemaher0/docs-skills",
+  "keywords": ["documentation", "repository-docs", "audit", "maintenance", "diagrams", "references"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Docs Skills",
+    "shortDescription": "Route and maintain repository docs",
+    "longDescription": "Route requested document work, audit repository documentation, update documents and diagrams, and curate reference notes.",
+    "developerName": "hemaher0",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": [
+      "Find the right location and workflow for this repository document.",
+      "Check whether the relevant repository documentation matches the current behavior.",
+      "Update the requested repository documentation using the current source of truth.",
+      "Create or update an editable diagram for the requested repository document.",
+      "Curate the requested reusable note in this repository's reference area."
+    ]
+  }
+}
