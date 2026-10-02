@@ -15,9 +15,15 @@ and local schema; reader-facing document work can use existing project rules.
 
 ### 1. Install for a project
 
-Use a repository marketplace and project configuration. Reuse a suitable source
-checkout when present. For a first setup, run these commands from
-the **target project's root**, with Git access to this repository:
+Keep the marketplace and enablement in the target project using the files
+below. Write these project files directly: `codex plugin marketplace add` and
+`codex plugin add` save user-level configuration in `~/.codex/config.toml`;
+running them from a project directory does not make them project-scoped.
+The plugin browser also saves user-level enablement choices.
+Neither route is a step in this project-only procedure.
+
+Reuse a suitable source checkout when present. For a first setup, run these
+commands from the **target project's root**, with Git access to this repository:
 
 ```bash
 mkdir -p .agents/vendor .agents/plugins .codex
@@ -79,11 +85,16 @@ needed by adding this setting to the same project configuration:
 enabled = true
 ```
 
-Open the target project as a trusted project in Codex, restart the app if using
-the desktop client, and start a **new Codex session**. Project configuration is
-loaded only for trusted projects. The marketplace source and enablement belong
-to this project; Codex may still store installed copies in its shared cache.
-See the [official repository marketplace and project configuration guide](https://developers.openai.com/plugins/build/plugins).
+Complete the project instructions and applicable schema setup below, then open
+the project as trusted and start a **new Codex session**; restart the desktop
+app when needed. Codex uses the project configuration during local marketplace
+discovery and refresh. Verify that the selected plugins' skills are available
+in that project session. Project configuration is loaded only for trusted projects.
+
+Codex may keep plugin files in its shared `~/.codex/plugins/cache/`; that cache
+location does not determine enablement scope. Existing user-level enablement
+remains a separate setting; adding project settings does not remove it.
+See the [official project plugin configuration guide](https://developers.openai.com/plugins/build/plugins#enable-or-disable-a-plugin-for-a-repo).
 
 ### 2. Configure project instructions
 
