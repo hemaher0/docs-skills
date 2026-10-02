@@ -96,6 +96,8 @@ Writing root `AGENTS.local.md` is a required installation step.
    into the existing file. Preserve established settings and other packages' sections.
 2. Replace applicable placeholders with actual values. For work records, fill
    the one canonical repository, audience, capture policy and persistence policy.
+   Use the project's established capture policy; installation does not reopen
+   that decision or require logging every request and discussion.
    For reference notes, fill the configured location and storage boundary.
    Fill local checkout/path overrides when used.
 3. Keep shared choices in effective project instructions or their existing
