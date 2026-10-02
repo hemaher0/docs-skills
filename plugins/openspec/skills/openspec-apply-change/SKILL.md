@@ -108,14 +108,19 @@ that schema. Do not create a document branch.
    - Show which task is being worked on
    - Make the code changes required
    - Keep changes minimal and focused
-   - Mark task complete in the tasks file: `- [ ]` → `- [x]`
+   - Verify the task's completion criteria, then mark it complete: `- [ ]` → `- [x]`
    - Continue to next task
 
-   **Pause if:**
-   - Task is unclear → ask for clarification
-   - Implementation reveals a design issue → suggest updating artifacts
-   - Error or blocker encountered → report and wait for guidance
-   - User interrupts
+   Diagnose ordinary errors and resolve factual gaps within the authorized goal.
+   Update governing artifacts through their owning workflow when the current
+   authorization covers that refinement. Continue independent work while a
+   dependent task remains blocked.
+
+   **Pause dependent work when:**
+   - A material requirement or decision cannot be resolved from available evidence
+   - A proposed change contradicts the agreed goal or exceeds existing authority
+   - A blocker remains after available diagnosis and needs an external input
+   - The user requests a pause or cancellation; otherwise incorporate new input
 
 7. **On completion or pause, show status**
 
@@ -180,11 +185,11 @@ What would you like to do?
 - For a task explicitly updating reader-facing repository documentation outside OpenSpec change and spec artifacts, use an available document workflow; otherwise follow the repository's documentation conventions. Keep OpenSpec artifacts in this workflow either way.
 - Keep going through tasks until done or blocked
 - Always read context files before starting (from the apply instructions output)
-- If task is ambiguous, pause and ask before implementing
-- If implementation reveals issues, pause and suggest artifact updates
+- Resolve factual ambiguity from available context; ask only for a material unresolved decision
+- Reconcile implementation issues with the governing artifacts within existing authority
 - Keep code changes minimal and scoped to each task
-- Update task checkbox immediately after completing each task
-- Pause on errors, blockers, or unclear requirements - don't guess
+- Update task checkbox after its completion criteria are verified
+- Diagnose errors within scope; pause dependent work for unresolved decisions or authority
 - Use contextFiles from CLI output, don't assume specific file names
 - Do not use context or operation guidance as proof that a task is complete
 - Apply relevant project context; report conflicts with controlling workflow inputs

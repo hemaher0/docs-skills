@@ -1,19 +1,19 @@
 ---
 schema_version: 2
-id: "{{monday_date}}-weekly-report"
+id: "{{week_start_date}}-weekly-report"
 type: "weekly-report"
 lifecycle: "draft"
 created_at: "{{timestamp_with_offset}}"
 updated_at: "{{timestamp_with_offset}}"
-period_start: "{{monday_date}}"
-period_end: "{{next_monday_date}}"
+period_start: "{{week_start_date}}"
+period_end: "{{week_end_date}}"
 as_of: "{{timestamp_with_offset}}"
 ---
-# {{monday_date}}-weekly report
+# {{week_start_date}}-weekly report
 
 ## Summary
 
-- Period: {{monday_date}} 00:00 to {{next_monday_date}} 00:00 Asia/Seoul (end exclusive)
+- Period: {{week_start_date}} 00:00 to {{week_end_date}} 00:00 {{timezone}} (end exclusive)
 - Generated as of: {{timestamp_with_offset}}
 - Overall status and material change from the prior week, if supported by sources:
 

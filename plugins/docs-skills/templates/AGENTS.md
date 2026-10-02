@@ -13,7 +13,8 @@ overrides go in AGENTS.local.md only when needed. -->
 
 ## Work Records (when configured)
 
-- Work-history capture policy: `<All requests and discussions, established project rule, or Disabled>`
+- Work-history capture policy: `Selective: preserve the goal and accepted scope, consequential decisions and rationale, progress, verification evidence, unresolved issues, and next action.`
+  <!-- Preserve a different established policy. Configure Disabled when history is unused; exhaustive capture requires an explicit project choice. -->
 - Canonical work-item repository: `<this project, one shared repository reference, or None>`
 - Work-record audience: `<established audience/access policy>`
 - Record persistence policy: `<chosen checkpoints and existing Git procedure, or local files only>`

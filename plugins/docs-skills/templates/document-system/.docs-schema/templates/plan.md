@@ -21,7 +21,7 @@ work_item_id: "{{work_item_id}}"
 link it here without creating a second task list. Otherwise repeat the task
 block below as needed. Task N headings/checkboxes support SDD extraction when
 SDD is selected; other controllers keep their required native task format.
-For SDD, retain a unique plan basename and make every extracted task self-contained. -->
+Make every extracted task self-contained; the selected executor owns workspace allocation. -->
 
 ## Tasks
 

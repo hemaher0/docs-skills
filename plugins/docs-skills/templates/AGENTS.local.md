@@ -1,8 +1,8 @@
 # Local Documentation Configuration
 
 <!-- Create or merge this package section into root AGENTS.local.md during
-installation. Keep the status even when no local overrides are needed; fill
-selected fields and remove unused fields/headings. Preserve existing values
+installation. Mark configuration complete only after required values or their
+existing authoritative sources are resolved. Remove unused fields/headings. Preserve existing values
 and other packages' sections. Project-wide capture, persistence, audience,
 document conventions and commands stay in their existing configuration sources.
 Use the configured canonical repository's local .docs-schema without copying
@@ -12,7 +12,8 @@ Local paths must refer to the same configured stores. Keep credentials out. -->
 
 ## Documentation Configuration Status
 
-- Local overrides: `<None. Use effective project settings and skill defaults. / Configured; see below. / Pending; identify the local decision.>`
+- Configuration status: `<Complete / Incomplete: identify required unresolved values>`
+- Existing documentation settings source, when applicable: `<actual path to the authoritative project documentation settings>`
 
 ## Local Document Locations
 

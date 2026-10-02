@@ -13,7 +13,8 @@ this skill does not dispatch extra agents or parallelize sequential implementati
 
 Read the configured repository's local schema before dispatch. When it supports
 `parent_work_item_id`, keep the user's topic as the root work item and assign
-each independently delegated task a unique dated child work-item ID and path.
+each independently delegated task needing separate history a unique dated
+child work-item ID and path under the established capture policy.
 Set the child's `parent_work_item_id` to the root or its owning subtask. The
 worker owns only that child's timeline and its task-specific local records;
 the coordinator owns the root timeline and integration decisions. A child
@@ -23,10 +24,10 @@ do not maintain an index file.
 Record the assigned child IDs and actual assigned workspace locations in the root's
 delegation event so unfinished work can be recovered before integration.
 
-Follow the configured capture policy in each owning node. Under all-turn
-capture, include every request and discussion. The root
-captures user requests, coordination, and acceptance; each child captures its
-delegated request, actions, decisions, evidence, code identity, and next action.
+Apply [maintaining-work-records](../maintaining-work-records/SKILL.md)'s capture
+criteria under the established project policy. The root preserves the goal,
+coordination decisions and accepted outcomes; each child preserves the relevant
+assignment, decisions, progress, evidence, code identity and continuation state.
 The child's parent ID supplies the link; the root summarizes its accepted outcome
 without copying the child's event stream. The resuming owner reads relevant
 history; give fresh workers bounded context, requirements/revision, authority,

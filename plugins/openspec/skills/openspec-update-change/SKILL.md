@@ -41,13 +41,15 @@ available, otherwise through the local
    - Auto-select if only one active change exists
    - If ambiguous, run `openspec list --json` to get available changes sorted by most recently modified, and ask the user to select one
 
-   When prompting, present the top 3-4 most recently modified changes as options, showing:
+   When prompting, present a manageable set of relevant active changes as options,
+   including a contextually relevant older change when needed. Show:
    - Change name
    - Schema (from `schema` field if present, otherwise "spec-driven")
    - Status (e.g., "0/5 tasks", "complete", "no tasks")
    - How recently it was modified (from `lastModified` field)
 
-   Mark the most recently modified change as "(Recommended)" since it's likely what the user wants to update.
+   Recommend a change only when the request or established work context supports
+   that choice. Modification time helps order the list; it does not establish intent.
 
    Always announce: "Using change: <name>" and how to override (e.g., `$openspec-update-change (Codex) or /openspec-update-change (other agents) <other>`).
 

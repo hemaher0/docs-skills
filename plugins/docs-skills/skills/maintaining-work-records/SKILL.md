@@ -44,16 +44,22 @@ need one integrator.
 
 Find an existing root or child work item with `python3 .docs-schema/records.py
 list`, search, and generated tree relations when available. Keep one root per
-user topic and one child per independent delegated task under a graph-capable
-schema; each has its own manifest path. Follow the configured capture policy;
-under all-turn capture, append each request and discussion turn
-to its owning node in order with its timestamp, source
-role, concise content, and outcome. Also append actions, decisions, checks,
-corrections, branch events, and relevant links as they happen. All-turn capture
-includes short questions; no separate file is needed for each message. Keep the local
-template's current-state and next-action fields current, including goal,
-progress, code branch/SHA, governing contract or change, experiments, tests,
-and blockers. On context handoff,
+captured topic and one child per delegated task needing separate history under
+a graph-capable schema; each has its own manifest path. Follow the established project capture
+policy. When capture is enabled without a more specific policy, use selective
+capture: preserve information that changes the goal or accepted scope, explains
+a consequential decision, establishes progress or verification, or affects
+remaining work and continuation. Group discussion supporting the same outcome
+into an accurate entry; the unit of history is a meaningful change, not a message.
+An explicitly exhaustive policy can require a fuller chronology; a disabled
+policy does not produce automatic history. Neither is selected merely because
+this skill is installed.
+
+For captured changes, preserve the actual source and authorship, timestamp,
+outcome, rationale, and relevant evidence. Record a decision before dependent
+work when practical and its observed result afterward. Maintain the current
+state and next action from those events, linking the governing artifacts rather
+than copying their entire contents. On context handoff,
 the resuming work owner reads the relevant root/descendants and linked sources
 to reconstruct what was discussed, planned, implemented, verified, and left
 to do. Fresh assignees receive bounded relevant context from that owner.
@@ -80,8 +86,8 @@ OpenSpec's artifacts for the same scope. Preserve the selected execution
 controller and its task format; use `Task N` extraction headings only when
 that controller requires them.
 Use `reference-note` for reusable sourced facts with validity bounds when that
-type is registered. For an unregistered type, first capture the request in the
-work item; update the local schema explicitly if the type is truly needed.
+type is registered. For an unregistered type, record the material need under
+the capture policy; update the local schema explicitly if the type is truly needed.
 Do not create unregistered directories or manual indexes. Read the configured
 repository's `.docs-schema/LIFECYCLE.md` when present; use its state meanings
 without treating one type's states as another's.

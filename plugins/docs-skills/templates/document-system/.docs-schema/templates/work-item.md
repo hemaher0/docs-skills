@@ -30,10 +30,10 @@ updated_at: "{{timestamp_with_offset}}"
 - Evidence:
 - Code SHA or command result, if applicable:
 
-<!-- Append events required by the configured capture policy in time order.
-All-turn capture includes each request/discussion, action, decision, result,
-and correction. Preserve actual authorship when another writer records an
-event. Use an accurate paraphrase and preserve essential quotes when needed. -->
+<!-- Append material changes under the established capture policy in time order.
+Keep enough context to reconstruct the goal, decisions and rationale, progress,
+evidence and continuation. Group related discussion by outcome. Preserve actual
+authorship; use accurate paraphrases and essential quotes where needed. -->
 
 ## Related records
 

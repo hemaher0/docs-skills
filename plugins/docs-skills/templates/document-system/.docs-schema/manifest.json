@@ -6,7 +6,7 @@
     "work-item": {
       "path": "references/work-items/{id}/{id}-work-item.md",
       "template": "templates/work-item.md",
-      "create_when": "Create one root for each user topic and one linked child for each independent delegated task; append later events to the owning record.",
+      "create_when": "When the capture policy calls for history, use one root per topic and a linked child for each independent delegated task needing its own history; append material changes to the owning record.",
       "required_sections": ["Current state", "Timeline", "Related records", "Next action"],
       "lifecycles": ["active", "deferred", "completed", "archived"],
       "work_item_required": false
@@ -54,7 +54,7 @@
     "weekly-report": {
       "path": "references/weekly-reports/{id}.md",
       "template": "templates/weekly-report.md",
-      "create_when": "A user manually requests a weekly summary for a Monday-to-Monday Asia/Seoul period.",
+      "create_when": "A user manually requests a weekly summary for the interval defined by timezone and week_start.",
       "required_sections": ["Summary", "Completed", "In progress", "Decisions and evidence", "Deferred and blocked", "Next actions", "Sources", "Corrections"],
       "lifecycles": ["draft", "final"],
       "work_item_required": false,

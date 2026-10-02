@@ -98,6 +98,10 @@ Writing root `AGENTS.local.md` is a required installation step.
    the one canonical repository, audience, capture policy and persistence policy.
    Use the project's established capture policy; installation does not reopen
    that decision or require logging every request and discussion.
+   If history is enabled without an established policy, use selective capture:
+   preserve the goal and accepted scope, consequential decisions and rationale,
+   progress, verification evidence, unresolved issues and next action. Group
+   related discussion by outcome. Explicit project policies remain authoritative.
    For reference notes, fill the configured location and storage boundary.
    Fill local checkout/path overrides when used.
 3. Keep shared choices in effective project instructions or their existing

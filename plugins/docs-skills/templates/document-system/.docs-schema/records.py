@@ -5,10 +5,11 @@ import argparse
 import datetime as dt
 import json
 import re
+import string
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from urllib.parse import unquote, urlsplit
-from zoneinfo import ZoneInfo
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 
 DATE_PREFIX = re.compile(r"^(\d{4}-\d{2}-\d{2})-[a-z0-9]+(?:-[a-z0-9]+)*$")
@@ -16,19 +17,72 @@ HEADING = re.compile(r"^# (\d{4}-\d{2}-\d{2})-.+$", re.MULTILINE)
 SECTION = re.compile(r"^## (.+?)\s*$", re.MULTILINE)
 LINK = re.compile(r"\[[^]]+\]\((<[^>]+>|[^)\s]+)(?:\s+['\"][^)]*['\"])?\)")
 COMMON_FIELDS = ("schema_version", "id", "type", "lifecycle", "created_at", "updated_at")
-ROOTS = ("references/work-items", "references/reference-notes", "references/weekly-reports")
+WEEKDAYS = ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
 EVENT = re.compile(r"^### (\S+) — ([^—\n]+) — ([^—\n]+)\s*$", re.MULTILINE)
 
 
 def schema(root):
-    return json.loads((root / ".docs-schema/manifest.json").read_text(encoding="utf-8"))
+    registry = json.loads((root / ".docs-schema/manifest.json").read_text(encoding="utf-8"))
+    if not isinstance(registry, dict):
+        raise ValueError("manifest must be an object")
+    return registry
 
 
-def paths(root):
-    for part in ROOTS:
-        directory = root / part
+def record_directories(root, registry):
+    """Derive managed directories from the registered record path templates."""
+    types = registry.get("types")
+    if not isinstance(types, dict):
+        raise ValueError("types must be an object")
+    directories = set()
+    for name, rule in types.items():
+        pattern = rule.get("path") if isinstance(rule, dict) else None
+        if not isinstance(pattern, str) or not pattern or not pattern.endswith(".md"):
+            raise ValueError(f"{name}: path must be a relative Markdown path template")
+        parts = PurePosixPath(pattern).parts
+        if PurePosixPath(pattern).is_absolute() or ".." in parts:
+            raise ValueError(f"{name}: path must stay inside the canonical repository")
+        for _, field, spec, conversion in string.Formatter().parse(pattern):
+            if field is not None and (field not in ("id", "work_item_id") or spec or conversion):
+                raise ValueError(f"{name}: unsupported path field {field!r}")
+        prefix = []
+        for part in parts[:-1]:
+            if "{" in part or "}" in part:
+                break
+            prefix.append(part)
+        directory = (root / Path(*prefix)).resolve()
+        if not directory.is_relative_to(root):
+            raise ValueError(f"{name}: record directory resolves outside the canonical repository")
+        directories.add(directory)
+    return directories
+
+
+def paths(root, registry=None):
+    root = Path(root).resolve()
+    registry = schema(root) if registry is None else registry
+    found = set()
+    for directory in record_directories(root, registry):
         if directory.exists():
-            yield from sorted(directory.rglob("*.md"))
+            for path in directory.rglob("*.md"):
+                if path.is_relative_to(root / ".docs-schema"):
+                    continue
+                if not path.resolve().is_relative_to(root):
+                    raise ValueError(f"record resolves outside the canonical repository: {path}")
+                found.add(path)
+    yield from sorted(found)
+
+
+def calendar(registry):
+    zone_name = registry.get("timezone")
+    weekday = registry.get("week_start")
+    if not isinstance(zone_name, str) or not zone_name:
+        raise ValueError("timezone must be an IANA timezone name")
+    try:
+        zone = ZoneInfo(zone_name)
+    except (ValueError, ZoneInfoNotFoundError) as error:
+        raise ValueError(f"invalid timezone {zone_name!r}") from error
+    if not isinstance(weekday, str) or weekday.lower() not in WEEKDAYS:
+        raise ValueError("week_start must be a weekday name")
+    return zone, WEEKDAYS.index(weekday.lower())
 
 
 def read_record(path):
@@ -86,6 +140,11 @@ def validate(root):
     types = registry.get("types", {})
     if not isinstance(types, dict):
         return errors + [".docs-schema/manifest.json: types must be an object"]
+    try:
+        _, week_start = calendar(registry)
+    except ValueError as error:
+        errors.append(f".docs-schema/manifest.json: {error}")
+        week_start = None
     for name, rule in types.items():
         if not isinstance(rule, dict):
             errors.append(f".docs-schema/manifest.json: invalid rule for {name}")
@@ -102,7 +161,11 @@ def validate(root):
             errors.append(f".docs-schema/manifest.json: {name} missing template")
     seen = {}
     records = []
-    for path in paths(root):
+    try:
+        record_paths = list(paths(root, registry))
+    except ValueError as error:
+        return errors + [f".docs-schema/manifest.json: {error}"]
+    for path in record_paths:
         relative = path.relative_to(root).as_posix()
         try:
             data, body = read_record(path)
@@ -199,8 +262,9 @@ def validate(root):
                 errors.append(f"{relative}: invalid weekly period")
             else:
                 start_date, end_date = dt.date.fromisoformat(start), dt.date.fromisoformat(end)
-                if start_date.weekday() != 0 or end_date - start_date != dt.timedelta(days=7) or document_date != start:
-                    errors.append(f"{relative}: weekly period must start Monday and end next Monday")
+                if ((week_start is not None and start_date.weekday() != week_start)
+                        or end_date - start_date != dt.timedelta(days=7) or document_date != start):
+                    errors.append(f"{relative}: weekly period must span seven days from the configured week_start")
             if timestamp(data.get("as_of")) is None:
                 errors.append(f"{relative}: invalid as_of")
     work_items = {data.get("id"): (relative, data) for relative, data, _ in records
@@ -283,17 +347,19 @@ def work_tree(root, work_item_id=None):
     return roots
 
 
-def weekly_events(root, monday):
-    if not valid_date(monday):
-        raise ValueError("week must be a YYYY-MM-DD date")
-    start_date = dt.date.fromisoformat(monday)
-    if start_date.weekday() != 0:
-        raise ValueError("week must start on Monday")
-    start = dt.datetime.combine(start_date, dt.time.min, ZoneInfo("Asia/Seoul"))
-    end = start + dt.timedelta(days=7)
+def weekly_events(root, week):
     root = Path(root).resolve()
+    registry = schema(root)
+    zone, week_start = calendar(registry)
+    if not valid_date(week):
+        raise ValueError("week must be a YYYY-MM-DD date")
+    start_date = dt.date.fromisoformat(week)
+    if start_date.weekday() != week_start:
+        raise ValueError(f"week must start on {WEEKDAYS[week_start].title()}")
+    start = dt.datetime.combine(start_date, dt.time.min, zone)
+    end = start + dt.timedelta(days=7)
     events = []
-    for path in paths(root):
+    for path in paths(root, registry):
         try:
             data, body = read_record(path)
         except (OSError, ValueError):
@@ -322,21 +388,24 @@ def main(argv=None):
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--format", choices=("json", "markdown"), default="json")
     parser.add_argument("--lifecycle")
-    parser.add_argument("--week", help="Monday date for events, YYYY-MM-DD in Asia/Seoul")
+    parser.add_argument("--week", help="Start date for events, YYYY-MM-DD using the manifest's week_start and timezone")
     parser.add_argument("--work-item", help="Root work-item ID for a tree view")
     args = parser.parse_args(argv)
     if args.command == "validate":
         errors = validate(args.root)
         for error in errors:
             print(error, file=sys.stderr)
-        print(f"Validated {len(list_records(args.root))} records; {len(errors)} errors")
+        if errors:
+            print(f"Validation failed; {len(errors)} errors")
+        else:
+            print(f"Validated {len(list_records(args.root))} records; 0 errors")
         return 1 if errors else 0
     if args.command == "events":
         if not args.week:
             parser.error("events requires --week")
         try:
             events = weekly_events(args.root, args.week)
-        except ValueError as error:
+        except (OSError, ValueError) as error:
             parser.error(str(error))
         if args.format == "json":
             print(json.dumps(events, indent=2, ensure_ascii=False))
@@ -348,7 +417,7 @@ def main(argv=None):
     if args.command == "tree":
         try:
             tree = work_tree(args.root, args.work_item)
-        except ValueError as error:
+        except (OSError, ValueError) as error:
             parser.error(str(error))
         if args.format == "json":
             print(json.dumps(tree, indent=2, ensure_ascii=False))
@@ -363,7 +432,10 @@ def main(argv=None):
             for node in tree if isinstance(tree, list) else [tree]:
                 print_node(node)
         return 0
-    records = list_records(args.root)
+    try:
+        records = list_records(args.root)
+    except (OSError, ValueError) as error:
+        parser.error(str(error))
     if args.lifecycle:
         records = [record for record in records if record.get("lifecycle") == args.lifecycle]
     if args.format == "json":

@@ -14,16 +14,9 @@ links. Append to it or create one from the local template. The local schema
 wins over this plugin's bundled starter. Report a missing required source
 without silently creating a second history. Reader-facing document work that
 does not require work records can proceed under its own project rules.
-Installation alone does not enable history capture. For a requested install
-or setup, read the [project settings template](../../templates/AGENTS.md), the
-[local configuration template](../../templates/AGENTS.local.md), and the source
-README when available. Create or merge root `AGENTS.local.md` even when no local
-overrides are needed, recording that outcome explicitly. Connect it through
-existing `AGENTS.md`; when absent, recommend a relative `AGENTS.md` symlink to
-the local file. Respect effective `AGENTS.override.md` precedence and avoid
-self-references. Preserve existing settings and resolve consequential unknowns
-with the user; an unresolved choice is not an unnecessary setting. Ordinary
-document work does not initialize installation configuration. Use
+Installation alone does not enable history capture. Installation and project
+configuration follow the source README and its templates. Ordinary document
+work uses the effective settings and resolves only gaps material to that work. Use
 [maintaining-work-records](../maintaining-work-records/SKILL.md)
 for configured capture and local record types.
 
@@ -33,13 +26,11 @@ their existing configuration or project guide. Inspect runtime facts rather
 than copying them into local settings. A selected external checkout override
 must resolve the same configured canonical repository, not another history.
 
-The work-item tree preserves the user's and agent's thinking over time: each request,
-discussion outcome, action, correction, evidence, current goal, code identity,
-and next action. Under an all-turn capture policy, a short question still gets
-a timeline entry in its owning work item. Record the user's request before
-dependent work where practical and
-append the result after it. A separate `decision`, `design`, `plan`, or `tdd`
-requires its registered creation condition; do not create one for every message.
+The work-item tree preserves enough context to reconstruct the goal, accepted
+scope, consequential decisions and rationale, progress, evidence, unresolved
+issues, and next action. The recorder owns capture criteria and policy defaults;
+message length or type does not determine significance. A separate `decision`,
+`design`, `plan`, or `tdd` requires its registered creation condition.
 When parallel agents need durable history, use
 [coordinating-parallel-document-work](../coordinating-parallel-document-work/SKILL.md)
 to give independent tasks separate linked work items and one owner for each

@@ -36,7 +36,17 @@ python3 .docs-schema/records.py tree --work-item 2026-09-29-example --format mar
 python3 .docs-schema/records.py events --week 2026-09-28 --format markdown
 ```
 
-`validate` checks registered paths and types, dates, metadata, sections, ID uniqueness, parent work items, parent cycles, weekly boundaries, and local Markdown links. `list` and `tree` are generated on demand from metadata; `tree` includes child work items and local records linked by `work_item_id`. Keep OpenSpec and experiment links in the owning work item. Do not maintain an `index.md` or parent backlink list. `events` finds timeline entries within a requested Monday-to-Monday Asia/Seoul period, including child events and entries in older work items, for a manually requested weekly report. The script ignores external URLs and non-record Markdown outside the registered roots. It cannot verify the content of a remote source or the truth of a statement.
+`validate` checks registered paths and types, dates, metadata, sections, ID uniqueness, parent work items, parent cycles, weekly boundaries, and local Markdown links. `list` and `tree` are generated on demand from metadata; `tree` includes child work items and local records linked by `work_item_id`. Keep OpenSpec and experiment links in the owning work item. Do not maintain an `index.md` or parent backlink list. `events` finds timeline entries in the manifest's configured weekly interval, including child events and entries in older work items, for a manually requested weekly report. The script ignores external URLs and non-record Markdown outside the registered roots. It cannot verify the content of a remote source or the truth of a statement.
+
+Record paths are repository-relative Markdown path templates using `{id}` and
+`{work_item_id}`. Discovery scans managed directories derived from the literal
+directory prefix before the first placeholder, once per file. Those directories
+are record-owned; keep unrelated prose outside them. Changing registered paths
+changes discovery as well as path validation. Paths must resolve inside the
+canonical repository. `timezone` is an IANA timezone name; `week_start` is a
+weekday name. The starter uses `Asia/Seoul` and `monday`, while local settings
+control both validation and event selection. `--week` supplies that week's
+configured start date; the end is exclusive seven local calendar days later.
 
 This starter is schema version 2. An existing version 1 repository stays on its
 local schema until its owner explicitly adopts the tree format. To migrate,
@@ -46,8 +56,9 @@ and set each local record's `schema_version` to 2. Validate all records and
 inspect `tree` before reviewing/persisting schema and migration together through
 the repository's Git procedure. Do not silently apply newer plugin templates.
 If the plugin is absent, use these local instructions and ordinary file tools.
-The guidance changes here retain version 2 paths, fields, required sections,
-and checker behavior; they do not migrate an existing repository.
+The checker honors version 2's registered paths and calendar settings. Its
+CLI and stored fields remain compatible; adopting an updated checker is an
+explicit local update, not an automatic migration of existing records.
 
 Formal specs and research records retain their native owners, schemas, and
 roots. When OpenSpec owns the scope, link its artifacts instead of copying its

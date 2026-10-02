@@ -112,8 +112,8 @@ class RecordsTest(unittest.TestCase):
         self.work_item()
         replacements = {"{{date}}": "2026-09-29", "{{topic}}": "feature",
                         "{{topic_title}}": "Feature", "{{timestamp_with_offset}}": "2026-09-29T10:00:00+09:00",
-                        "{{work_item_id}}": "2026-09-29-feature", "{{monday_date}}": "2026-09-28",
-                        "{{next_monday_date}}": "2026-10-05"}
+                        "{{work_item_id}}": "2026-09-29-feature", "{{week_start_date}}": "2026-09-28",
+                        "{{week_end_date}}": "2026-10-05", "{{timezone}}": "Asia/Seoul"}
         for doc_type in ("decision", "design", "plan", "tdd", "reference-note", "weekly-report"):
             content = (self.root / ".docs-schema/templates" / f"{doc_type}.md").read_text()
             for source, target in replacements.items():
@@ -149,6 +149,102 @@ class RecordsTest(unittest.TestCase):
         self.work_item()
         (self.root / ".docs-schema/templates/work-item.md").unlink()
         self.assertIn("missing template", "\n".join(self.records.validate(self.root)))
+
+    def configure(self, **settings):
+        manifest = self.root / ".docs-schema/manifest.json"
+        registry = json.loads(manifest.read_text())
+        registry.update(settings)
+        manifest.write_text(json.dumps(registry))
+        return registry
+
+    def relocate_work_item(self):
+        path = self.work_item()
+        registry = json.loads((self.root / ".docs-schema/manifest.json").read_text())
+        registry["types"]["work-item"]["path"] = "notes/work/{id}.md"
+        self.configure(types=registry["types"])
+        target = self.root / "notes/work/2026-09-29-feature.md"
+        target.parent.mkdir(parents=True)
+        path.rename(target)
+        return target
+
+    def test_registered_custom_path_is_discovered_and_validated(self):
+        self.relocate_work_item()
+        self.assertEqual(self.records.validate(self.root), [])
+        listed = self.records.list_records(self.root)
+        self.assertEqual(len(listed), 1)
+        self.assertEqual(listed[0]["path"], "notes/work/2026-09-29-feature.md")
+        self.assertEqual(self.records.work_tree(self.root)[0]["id"], "2026-09-29-feature")
+        self.assertEqual(len(self.records.weekly_events(self.root, "2026-09-28")), 1)
+
+    def test_malformed_record_under_custom_path_is_not_silently_skipped(self):
+        self.relocate_work_item().write_text("Malformed record without metadata.\n")
+        errors = "\n".join(self.records.validate(self.root))
+        self.assertIn("notes/work/2026-09-29-feature.md", errors)
+        self.assertIn("missing JSON-scalar front matter", errors)
+
+    def test_overlapping_registered_roots_discover_each_record_once(self):
+        self.relocate_work_item()
+        registry = json.loads((self.root / ".docs-schema/manifest.json").read_text())
+        registry["types"]["reference-note"]["path"] = "notes/{id}.md"
+        self.configure(types=registry["types"])
+        self.assertEqual(len(self.records.list_records(self.root)), 1)
+        self.assertEqual(self.records.validate(self.root), [])
+
+    def test_invalid_registered_path_reports_configuration_error(self):
+        registry = json.loads((self.root / ".docs-schema/manifest.json").read_text())
+        for pattern in ("../outside/{id}.md", "/outside/{id}.md", "notes/{unknown}.md"):
+            with self.subTest(pattern=pattern):
+                registry["types"]["work-item"]["path"] = pattern
+                self.configure(types=registry["types"])
+                self.assertTrue(self.records.validate(self.root))
+                result = subprocess.run([sys.executable, ".docs-schema/records.py", "validate"],
+                                        cwd=self.root, capture_output=True, text=True)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertNotIn("Traceback", result.stderr)
+
+    def test_weekly_events_follow_configured_timezone_and_exclusive_end(self):
+        path = self.work_item()
+        path.write_text(path.read_text().replace("### 2026-09-29T10:00:00+09:00", "### 2026-09-27T18:00:00+00:00")
+                        .replace("## Related records",
+                                 "### 2026-10-04T20:00:00+00:00 — result — agent\n\nWithin UTC week.\n\n"
+                                 "### 2026-10-05T00:00:00+00:00 — result — agent\n\nNext UTC week.\n\n"
+                                 "## Related records"))
+        self.configure(timezone="UTC")
+        events = self.records.weekly_events(self.root, "2026-09-28")
+        self.assertEqual([event["timestamp"] for event in events], ["2026-10-04T20:00:00+00:00"])
+
+    def test_configured_weekday_governs_events_and_report_validation(self):
+        self.work_item()
+        self.configure(timezone="UTC", week_start="sunday")
+        self.assertEqual(len(self.records.weekly_events(self.root, "2026-09-27")), 1)
+        with self.assertRaisesRegex(ValueError, "Sunday"):
+            self.records.weekly_events(self.root, "2026-09-28")
+        self.write("references/weekly-reports/2026-09-27-weekly-report.md",
+                   self.base("weekly-report", "2026-09-27-weekly-report", lifecycle="draft",
+                             period_start="2026-09-27", period_end="2026-10-04",
+                             as_of="2026-09-29T10:00:00+00:00"),
+                   ["Summary", "Completed", "In progress", "Decisions and evidence",
+                    "Deferred and blocked", "Next actions", "Sources", "Corrections"])
+        self.assertEqual(self.records.validate(self.root), [])
+
+    def test_invalid_calendar_reports_configuration_error(self):
+        for settings in ({"timezone": "Invalid/Timezone"}, {"timezone": "UTC", "week_start": "not-a-day"}):
+            with self.subTest(settings=settings):
+                self.configure(**settings)
+                self.assertIn("manifest.json", "\n".join(self.records.validate(self.root)))
+                with self.assertRaises(ValueError):
+                    self.records.weekly_events(self.root, "2026-09-28")
+
+    def test_invalid_manifest_shape_reports_error_without_traceback(self):
+        manifest = self.root / ".docs-schema/manifest.json"
+        for value in (None, [], "not an object"):
+            with self.subTest(value=value):
+                manifest.write_text(json.dumps(value))
+                self.assertIn("manifest must be an object", "\n".join(self.records.validate(self.root)))
+                result = subprocess.run([sys.executable, ".docs-schema/records.py", "validate"],
+                                        cwd=self.root, capture_output=True, text=True)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertNotIn("Traceback", result.stderr)
 
     def test_weekly_events_include_timeline_from_older_work_items(self):
         path = self.work_item()
