@@ -1,242 +1,402 @@
 # docs-skills
 
-A Codex plugin marketplace with two independently installable plugins:
+This repository contains two independently selectable skill collections:
 
-| Plugin | Role |
-| --- | --- |
-| [docs-skills](plugins/docs-skills/.codex-plugin/plugin.json) | Route document work and preserve history when the project's work-record policy is configured. |
-| [openspec](plugins/openspec/.codex-plugin/plugin.json) | Explore, plan, implement, synchronize, and archive OpenSpec changes. |
+| Collection | Source root | Role |
+| --- | --- | --- |
+| [docs-skills](plugins/docs-skills/skills/) | `plugins/docs-skills/skills/` | Route and maintain repository documentation, diagrams, reference notes, and configured work records. |
+| [openspec](plugins/openspec/skills/) | `plugins/openspec/skills/` | Explore, plan, implement, synchronize, and archive OpenSpec changes. |
 
-## Install and configure
+Codex discovers repository skills in `.agents/skills/` and user-wide skills in
+`$HOME/.agents/skills/`. The procedures below keep the native repository in a
+`vendor/` checkout so its packaged templates remain available, then expose only
+the selected complete skill directories through relative symbolic links. Do not
+link individual files or the collection root.
 
-Install the selected plugin and configure applicable project settings using
-the steps below. Recording work history requires a chosen canonical repository
-and local schema; reader-facing document work can use existing project rules.
+The OpenSpec collection requires the native OpenSpec CLI. This repository does
+not install it. Follow the
+[OpenSpec installation guide](https://github.com/Fission-AI/OpenSpec/blob/main/docs/installation.md)
+and run `openspec --version` before invoking an OpenSpec skill. The packaged
+OpenSpec skill metadata was generated for CLI 1.8.0; preserve the native CLI's
+own store, schema, and compatibility checks.
 
-### 1. Install for a project
+## Install for a project
 
-Keep the marketplace and enablement in the target project using the files
-below. Write these project files directly: `codex plugin marketplace add` and
-`codex plugin add` save user-level configuration in `~/.codex/config.toml`;
-running them from a project directory does not make them project-scoped.
-The plugin browser also saves user-level enablement choices.
-Neither route is a step in this project-only procedure.
-
-Reuse a suitable source checkout when present. For a first setup, run these
-commands from the **target project's root**, with Git access to this repository:
+Run these commands from the target project's root. The clone command deliberately
+fails when `.agents/vendor/docs-skills` already exists so it cannot replace an
+existing checkout.
 
 ```bash
-mkdir -p .agents/vendor .agents/plugins .codex
+mkdir -p .agents/vendor .agents/skills
 git clone --branch main https://github.com/hemaher0/docs-skills.git .agents/vendor/docs-skills
 ```
 
-Create or merge the following into the target project's
-`.agents/plugins/marketplace.json`:
-
-```json
-{
-  "name": "project-skills",
-  "plugins": [
-    {
-      "name": "docs-skills",
-      "source": {
-        "source": "local",
-        "path": "./.agents/vendor/docs-skills/plugins/docs-skills"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Productivity"
-    },
-    {
-      "name": "openspec",
-      "source": {
-        "source": "local",
-        "path": "./.agents/vendor/docs-skills/plugins/openspec"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Productivity"
-    }
-  ]
-}
-```
-
-Keep existing marketplace entries. When using multiple skill repositories, add
-their entries to the same `plugins` array. Paths resolve from the target
-project's root. If its marketplace already has a different `name`, keep that
-name and use it in the configuration keys below.
-
-Merge this setting into the target project's `.codex/config.toml`:
-
-```toml
-[plugins."docs-skills@project-skills"]
-enabled = true
-```
-
-The OpenSpec entry makes that plugin available separately. Enable it only if
-needed by adding this setting to the same project configuration:
-
-```toml
-[plugins."openspec@project-skills"]
-enabled = true
-```
-
-Complete the project instructions and applicable schema setup below, then open
-the project as trusted and start a **new Codex session**; restart the desktop
-app when needed. Codex uses the project configuration during local marketplace
-discovery and refresh. Verify that the selected plugins' skills are available
-in that project session. Project configuration is loaded only for trusted projects.
-
-Codex may keep plugin files in its shared `~/.codex/plugins/cache/`; that cache
-location does not determine enablement scope. Existing user-level enablement
-remains a separate setting; adding project settings does not remove it.
-See the [official project plugin configuration guide](https://developers.openai.com/plugins/build/plugins#enable-or-disable-a-plugin-for-a-repo).
-
-### 2. Configure project instructions
-
-Writing root `AGENTS.local.md` is a required installation step.
-
-1. Read existing project instructions, the
-   [project settings template](plugins/docs-skills/templates/AGENTS.md) and the
-   [local configuration template](plugins/docs-skills/templates/AGENTS.local.md).
-   Create the local file from the template, or merge its documentation section
-   into the existing file. Preserve established settings and other packages' sections.
-2. Replace applicable placeholders with actual values. For work records, fill
-   the one canonical repository, audience, capture policy and persistence policy.
-   Use the project's established capture policy; installation does not reopen
-   that decision or require logging every request and discussion.
-   If history is enabled without an established policy, use selective capture:
-   preserve the goal and accepted scope, consequential decisions and rationale,
-   progress, verification evidence, unresolved issues and next action. Group
-   related discussion by outcome. Explicit project policies remain authoritative.
-   For reference notes, fill the configured location and storage boundary.
-   Fill local checkout/path overrides when used.
-3. Keep shared choices in effective project instructions or their existing
-   policy home. Documentation conventions and check commands stay in their
-   guide/native configuration; record types and paths stay in the local
-   `.docs-schema`; formal-store settings stay in that tool's configuration.
-   Reference actual sources where settings already exist and verify their
-   contents. The workflow entrypoint is
-   [using-docs-skills](plugins/docs-skills/skills/using-docs-skills/SKILL.md).
-4. Remove fields for features the project does not use. `Disabled`/`None`
-   denotes an unused feature, not a missing value. Required unset values keep
-   configuration incomplete; a generic "use defaults" statement does not
-   configure a repository or storage location.
-5. Connect the local file to root instructions using the procedure below.
-
-If root `AGENTS.md` exists, preserve it and add this instruction unless it
-already reads or resolves to the local file:
-
-```markdown
-Read and follow root AGENTS.local.md when it exists.
-```
-
-If `AGENTS.md` is absent, the recommended connection is a relative symbolic
-link from the project root, after writing `AGENTS.local.md`:
+Choose documentation and OpenSpec skills independently. For a selective install,
+link each complete skill folder you want. These examples select one skill from
+each collection and preserve an existing destination:
 
 ```bash
-ln -s AGENTS.local.md AGENTS.md
+if [ -e .agents/skills/maintaining-documentation ] || [ -L .agents/skills/maintaining-documentation ]; then
+  printf '%s\n' '.agents/skills/maintaining-documentation already exists; leaving it unchanged' >&2
+else
+  ln -s ../vendor/docs-skills/plugins/docs-skills/skills/maintaining-documentation .agents/skills/maintaining-documentation
+fi
+
+if [ -e .agents/skills/openspec-propose ] || [ -L .agents/skills/openspec-propose ]; then
+  printf '%s\n' '.agents/skills/openspec-propose already exists; leaving it unchanged' >&2
+else
+  ln -s ../vendor/docs-skills/plugins/openspec/skills/openspec-propose .agents/skills/openspec-propose
+fi
 ```
 
-Preserve existing files and links and avoid self-references. If
-`AGENTS.override.md` takes precedence, ensure it reads the local file.
+Replace the final directory name and target with any name in the collection
+tables below. Do not use `ln -sf`: an existing file, directory, or broken link
+may belong to another installation.
 
-### 3. Set up work records when used
+As an alternative, expose every documentation skill with this all-skills block:
 
-Use **one canonical work-item repository**: this project or one existing
-document repository. Preserve its configured identity, audience, capture and
-persistence rules. A local checkout override resolves that same repository.
-Follow its Git/access policy; installing the plugin does not select commits
-after every turn or remote sync.
+```bash
+(
+  set -eu
+  for skill_dir in .agents/vendor/docs-skills/plugins/docs-skills/skills/*; do
+    skill_name=${skill_dir##*/}
+    destination=.agents/skills/$skill_name
+    if [ -e "$destination" ] || [ -L "$destination" ]; then
+      printf '%s\n' "$destination already exists; no links created" >&2
+      exit 1
+    fi
+  done
+  for skill_dir in .agents/vendor/docs-skills/plugins/docs-skills/skills/*; do
+    skill_name=${skill_dir##*/}
+    ln -s "../vendor/docs-skills/plugins/docs-skills/skills/$skill_name" ".agents/skills/$skill_name"
+  done
+)
+```
 
-1. In the chosen repository, copy the entire
-   [starter `.docs-schema/`](plugins/docs-skills/templates/document-system/.docs-schema/README.md)
-   directory **only if no local `.docs-schema/` exists**. It is under
-   `.agents/vendor/docs-skills/plugins/docs-skills/templates/document-system/`
-   in this setup. Keep an existing local schema authoritative; installation
-   does not migrate it. Adopt the documented version 2 migration only for a
-   requested format change. Use one record writer if the schema lacks child nodes.
-2. From the chosen document repository, run:
+Expose every OpenSpec skill independently with this block:
 
-   ```bash
-   python3 .docs-schema/records.py validate
-   ```
+```bash
+(
+  set -eu
+  for skill_dir in .agents/vendor/docs-skills/plugins/openspec/skills/*; do
+    skill_name=${skill_dir##*/}
+    destination=.agents/skills/$skill_name
+    if [ -e "$destination" ] || [ -L "$destination" ]; then
+      printf '%s\n' "$destination already exists; no links created" >&2
+      exit 1
+    fi
+  done
+  for skill_dir in .agents/vendor/docs-skills/plugins/openspec/skills/*; do
+    skill_name=${skill_dir##*/}
+    ln -s "../vendor/docs-skills/plugins/openspec/skills/$skill_name" ".agents/skills/$skill_name"
+  done
+)
+```
 
-Before completing installation, read the completed `AGENTS.local.md` and its
-referenced configuration. Verify that applicable values are filled, no
-placeholders remain, configured paths resolve, and effective instructions read
-the local file. Validate the schema when work records are used. Check actual
-marketplace paths/name and skill availability in a new session. Report the
-configured features and any incomplete setup.
+Run both all-skills blocks to expose all thirteen skills. Running one does not
+select anything from the other collection.
 
-## Update or remove from a project
+### Configure the project when needed
 
-From the target project's root, update its source checkout:
+Reader-facing document work can use the project's existing documentation rules;
+installing a documentation skill does not enable work-history capture. If the
+project chooses work records, first configure its canonical record repository,
+capture policy, audience, and persistence policy. Merge the relevant fields from
+[`AGENTS.md`](plugins/docs-skills/templates/AGENTS.md) and
+[`AGENTS.local.md`](plugins/docs-skills/templates/AGENTS.local.md) into the
+project's effective instructions while preserving existing settings.
+
+The canonical record repository owns its `.docs-schema/`. When it is this target
+project, run the following from the project root. The starter is copied only
+when no local path or link already exists:
+
+```bash
+(
+  set -eu
+  if [ -e .docs-schema ] || [ -L .docs-schema ]; then
+    printf '%s\n' '.docs-schema already exists; leaving the local schema unchanged' >&2
+    exit 1
+  fi
+  cp -R .agents/vendor/docs-skills/plugins/docs-skills/templates/document-system/.docs-schema .docs-schema
+  python3 .docs-schema/records.py validate
+)
+```
+
+The copied directory becomes project-owned and authoritative. Never symlink it
+to the vendor checkout, overwrite it during an update, or copy it into a second
+repository for the same work history. Migrations require an explicit local
+decision and the procedure in its own README.
+
+When the configured canonical repository is a different existing repository,
+run this from the target project after replacing the destination placeholder:
+
+```bash
+(
+  set -eu
+  skill_source=$PWD/.agents/vendor/docs-skills/plugins/docs-skills/templates/document-system/.docs-schema
+  canonical_record_root=/absolute/path/to/canonical-record-repository
+  if [ -e "$canonical_record_root/.docs-schema" ] || [ -L "$canonical_record_root/.docs-schema" ]; then
+    printf '%s\n' "$canonical_record_root/.docs-schema already exists; leaving it unchanged" >&2
+    exit 1
+  fi
+  cp -R "$skill_source" "$canonical_record_root/.docs-schema"
+  cd "$canonical_record_root"
+  python3 .docs-schema/records.py validate
+)
+```
+
+Do not create another history store merely because its checkout is elsewhere.
+
+For a project newly adopting OpenSpec, initialize its native store from the
+project root:
+
+```bash
+openspec init --tools none
+```
+
+`--tools none` avoids generating duplicate tool skills. Keep an existing
+`openspec/` configuration and do not reinitialize or migrate it merely because
+these skills were installed.
+
+### Invoke and verify the project install
+
+Invoke a selected skill by its name, for example `$maintaining-documentation`
+or `$openspec-propose` in Codex. Other clients may expose the same skill with a
+slash command.
+
+Check each selected link and its entrypoint from the project root:
+
+```bash
+readlink .agents/skills/maintaining-documentation
+test -f .agents/skills/maintaining-documentation/SKILL.md
+readlink .agents/skills/openspec-propose
+test -f .agents/skills/openspec-propose/SKILL.md
+```
+
+Use the current host's skill listing to verify actual availability. A checkout
+under `vendor/` or a plugin cache entry is not itself an available skill. Codex
+normally detects skill changes automatically; start a new session or restart the
+client if the current session does not refresh.
+
+When one skill optionally routes to another, it resolves and uses the exact name
+and resource path in that host listing. It does not open an adjacent vendor or
+cache copy, because project, global, and plugin installations can be different
+revisions.
+
+Project and user-wide skills with the same `name` can both appear; their contents
+are not merged, and a project link does not promise to hide a global copy. Remove
+or rename the unintended duplicate rather than relying on precedence.
+
+### Update or remove the project install
+
+Update the project-owned source checkout without recreating its links:
 
 ```bash
 git -C .agents/vendor/docs-skills pull --ff-only
 ```
 
-Restart the app if using the desktop client and start a new Codex session so
-the local plugin is refreshed.
+Verify the linked `SKILL.md` files and current host listing again. Automatic
+change detection normally refreshes the skills; start a new session or restart
+the client if needed. Updating the vendor checkout never updates a copied local
+`.docs-schema/`.
 
-To disable it for this project, set
-`plugins."docs-skills@project-skills".enabled = false` in
-`.codex/config.toml`, using the project's actual marketplace name. To remove
-the project setup, remove that configuration entry and only the `docs-skills`
-entry from `.agents/plugins/marketplace.json`. Keep other plugins' entries.
-Disable or remove `openspec@project-skills` independently in the same way.
-Keep the source checkout while either plugin still uses it; remove it separately
-once neither plugin needs it.
+Before removing a selected skill, inspect the exact link, then unlink only that
+destination:
 
-## Repository documentation
+```bash
+readlink .agents/skills/maintaining-documentation
+unlink .agents/skills/maintaining-documentation
+```
+
+Repeat for the other links intentionally installed from this checkout. Keep
+`.agents/vendor/docs-skills` while any selected link or project procedure still
+uses its skills or templates. Removing skill links does not remove project-owned
+records, `.docs-schema/`, OpenSpec artifacts, or project instructions.
+
+## Install globally
+
+A global install makes the selected skills discoverable to projects for that
+user. It does not configure work records, documentation policy, OpenSpec, Git,
+or publication for any project.
+
+Clone the native source under the user-wide `.agents` root. Do not replace an
+existing checkout:
+
+```bash
+mkdir -p "$HOME/.agents/vendor" "$HOME/.agents/skills"
+git clone --branch main https://github.com/hemaher0/docs-skills.git "$HOME/.agents/vendor/docs-skills"
+```
+
+Select documentation and OpenSpec skills independently. For example:
+
+```bash
+if [ -e "$HOME/.agents/skills/maintaining-documentation" ] || [ -L "$HOME/.agents/skills/maintaining-documentation" ]; then
+  printf '%s\n' "$HOME/.agents/skills/maintaining-documentation already exists; leaving it unchanged" >&2
+else
+  ln -s ../vendor/docs-skills/plugins/docs-skills/skills/maintaining-documentation "$HOME/.agents/skills/maintaining-documentation"
+fi
+
+if [ -e "$HOME/.agents/skills/openspec-propose" ] || [ -L "$HOME/.agents/skills/openspec-propose" ]; then
+  printf '%s\n' "$HOME/.agents/skills/openspec-propose already exists; leaving it unchanged" >&2
+else
+  ln -s ../vendor/docs-skills/plugins/openspec/skills/openspec-propose "$HOME/.agents/skills/openspec-propose"
+fi
+```
+
+As an alternative, expose all documentation skills:
+
+```bash
+(
+  set -eu
+  for skill_dir in "$HOME"/.agents/vendor/docs-skills/plugins/docs-skills/skills/*; do
+    skill_name=${skill_dir##*/}
+    destination=$HOME/.agents/skills/$skill_name
+    if [ -e "$destination" ] || [ -L "$destination" ]; then
+      printf '%s\n' "$destination already exists; no links created" >&2
+      exit 1
+    fi
+  done
+  for skill_dir in "$HOME"/.agents/vendor/docs-skills/plugins/docs-skills/skills/*; do
+    skill_name=${skill_dir##*/}
+    ln -s "../vendor/docs-skills/plugins/docs-skills/skills/$skill_name" "$HOME/.agents/skills/$skill_name"
+  done
+)
+```
+
+Expose all OpenSpec skills independently:
+
+```bash
+(
+  set -eu
+  for skill_dir in "$HOME"/.agents/vendor/docs-skills/plugins/openspec/skills/*; do
+    skill_name=${skill_dir##*/}
+    destination=$HOME/.agents/skills/$skill_name
+    if [ -e "$destination" ] || [ -L "$destination" ]; then
+      printf '%s\n' "$destination already exists; no links created" >&2
+      exit 1
+    fi
+  done
+  for skill_dir in "$HOME"/.agents/vendor/docs-skills/plugins/openspec/skills/*; do
+    skill_name=${skill_dir##*/}
+    ln -s "../vendor/docs-skills/plugins/openspec/skills/$skill_name" "$HOME/.agents/skills/$skill_name"
+  done
+)
+```
+
+Run both blocks for all thirteen skills. Existing destinations stop the relevant
+block before it creates any links.
+
+### Configure projects that use global skills
+
+Global discovery does not make configuration global. Each project retains its
+own documentation rules and native OpenSpec store. If a project enables work
+records, merge the global checkout's instruction templates into that project's
+effective instructions and copy a project-owned schema only when absent:
+
+```bash
+(
+  set -eu
+  if [ -e .docs-schema ] || [ -L .docs-schema ]; then
+    printf '%s\n' '.docs-schema already exists; leaving the local schema unchanged' >&2
+    exit 1
+  fi
+  cp -R "$HOME/.agents/vendor/docs-skills/plugins/docs-skills/templates/document-system/.docs-schema" .docs-schema
+  python3 .docs-schema/records.py validate
+)
+```
+
+For a new OpenSpec project, run `openspec init --tools none` in that project.
+Keep existing project configuration. Installing globally does not install the
+OpenSpec CLI or initialize any project.
+
+### Invoke, verify, update, or remove the global install
+
+Invoke skills by name as above. Check selected global links directly:
+
+```bash
+readlink "$HOME/.agents/skills/maintaining-documentation"
+test -f "$HOME/.agents/skills/maintaining-documentation/SKILL.md"
+readlink "$HOME/.agents/skills/openspec-propose"
+test -f "$HOME/.agents/skills/openspec-propose/SKILL.md"
+```
+
+Confirm the current host lists the selected skills. A vendor or cache directory
+alone does not establish availability. Skill changes are normally detected
+automatically; use a new session or restart the client if they are not refreshed.
+Optional routes use the exact installed resource reported by that listing. The
+duplicate-name behavior described for project installs also applies here.
+
+Update only the global source checkout:
+
+```bash
+git -C "$HOME/.agents/vendor/docs-skills" pull --ff-only
+```
+
+Before removing a selected global skill, inspect and unlink its exact destination:
+
+```bash
+readlink "$HOME/.agents/skills/maintaining-documentation"
+unlink "$HOME/.agents/skills/maintaining-documentation"
+```
+
+Keep the global vendor checkout while any remaining global link uses it. Removing
+it does not change project-local links, schemas, records, OpenSpec stores, or
+instructions.
+
+## Optional plugin compatibility
+
+The repository also retains native plugin manifests for clients that support
+plugin marketplaces. The marketplace identifier is `hemaher0-docs-skills`, and
+the two independent packages are `docs-skills` and `openspec`:
+
+```bash
+codex plugin marketplace add https://github.com/hemaher0/docs-skills.git
+codex plugin add docs-skills@hemaher0-docs-skills
+codex plugin add openspec@hemaher0-docs-skills
+```
+
+Use only the package or packages wanted. Plugin commands and the plugin browser
+may write user-level client configuration and managed cache copies, so this is a
+separate installation route rather than part of either `.agents/skills`
+procedure. Do not enable the same skill names through both routes unless duplicate
+entries are intentional. Plugin installation still does not configure a project,
+copy `.docs-schema/`, install the OpenSpec CLI, initialize OpenSpec, enable
+history capture, authorize Notion or other external writes, run workloads, or
+authorize Git publication.
+
+## Skill reference
+
+### Documentation skills
 
 | Skill | Role |
 | --- | --- |
-| [using-docs-skills](plugins/docs-skills/skills/using-docs-skills/SKILL.md) | Route documents to their owners and find work-item nodes under configured history capture. |
-| [coordinating-parallel-document-work](plugins/docs-skills/skills/coordinating-parallel-document-work/SKILL.md) | Give parallel tasks linked child records and integrate them without competing writes. |
-| [maintaining-work-records](plugins/docs-skills/skills/maintaining-work-records/SKILL.md) | Maintain work-item timelines, specialized local records, lifecycle, and manually requested weekly reports. |
-| [auditing-documentation](plugins/docs-skills/skills/auditing-documentation/SKILL.md) | Compare documentation claims with current sources without changing files. |
-| [maintaining-documentation](plugins/docs-skills/skills/maintaining-documentation/SKILL.md) | Make a focused repository documentation change when requested or required by repository policy. |
-| [maintaining-diagrams](plugins/docs-skills/skills/maintaining-diagrams/SKILL.md) | Create or update an editable diagram that explains a repository document or managed text artifact. |
-| [curating-reference-notes](plugins/docs-skills/skills/curating-reference-notes/SKILL.md) | Maintain reusable internal notes in the repository-designated reference area. |
+| [using-docs-skills](plugins/docs-skills/skills/using-docs-skills/SKILL.md) | Route document work and locate owning work records under configured capture. |
+| [coordinating-parallel-document-work](plugins/docs-skills/skills/coordinating-parallel-document-work/SKILL.md) | Assign linked child records and exclusive writers for parallel document work. |
+| [maintaining-work-records](plugins/docs-skills/skills/maintaining-work-records/SKILL.md) | Maintain work-item timelines, registered local records, lifecycle, and requested weekly reports. |
+| [auditing-documentation](plugins/docs-skills/skills/auditing-documentation/SKILL.md) | Compare repository documentation with its current sources without editing. |
+| [maintaining-documentation](plugins/docs-skills/skills/maintaining-documentation/SKILL.md) | Make focused repository documentation changes. |
+| [maintaining-diagrams](plugins/docs-skills/skills/maintaining-diagrams/SKILL.md) | Create or update editable diagrams in owned text artifacts. |
+| [curating-reference-notes](plugins/docs-skills/skills/curating-reference-notes/SKILL.md) | Maintain reusable sourced notes in a repository-designated reference area. |
 
 The copied [local schema](plugins/docs-skills/templates/document-system/.docs-schema/README.md)
-controls record types, paths, templates, and validation; it works with ordinary
-file tools when this plugin is unavailable. The schema also documents its
-[template sources](plugins/docs-skills/templates/document-system/.docs-schema/TEMPLATE_SOURCES.md).
+controls work-record types, paths, templates, lifecycle, and validation and remains
+usable with ordinary file tools when no documentation skill is available.
 
-Development owns intent, necessary derived requirements, the active spec/plan,
-execution and technical review. Documentation owns placement, durable history,
-reader-facing edits and factual audits. Git owns actual checkouts, content/message
-review, authorization and mutations. Product docs accompany code in its assigned
-checkout; work records follow their configured repository/schema and audience.
-Linked child work items retain history and do not replace briefs/reports or
-transfer responsibility. One active plan and execution controller govern a
-scope. Preserve accepted requirements, decisions, review outcomes and covering
-evidence durably before the domain owner disposes of temporary records.
-
-## OpenSpec
+### OpenSpec skills
 
 | Skill | Role |
 | --- | --- |
-| [openspec-explore](plugins/openspec/skills/openspec-explore/SKILL.md) | Explore an idea or change before deciding its scope. |
-| [openspec-propose](plugins/openspec/skills/openspec-propose/SKILL.md) | Create a proposal and its planning artifacts. |
+| [openspec-explore](plugins/openspec/skills/openspec-explore/SKILL.md) | Explore a change or problem before or during planning. |
+| [openspec-propose](plugins/openspec/skills/openspec-propose/SKILL.md) | Create a change and the artifacts needed for implementation. |
 | [openspec-update-change](plugins/openspec/skills/openspec-update-change/SKILL.md) | Revise an existing change's planning artifacts. |
-| [openspec-apply-change](plugins/openspec/skills/openspec-apply-change/SKILL.md) | Implement tasks from an OpenSpec change. |
-| [openspec-sync-specs](plugins/openspec/skills/openspec-sync-specs/SKILL.md) | Sync a change's delta specs into the main specs. |
-| [openspec-archive-change](plugins/openspec/skills/openspec-archive-change/SKILL.md) | Archive a completed change. |
+| [openspec-apply-change](plugins/openspec/skills/openspec-apply-change/SKILL.md) | Implement and verify tasks from a change. |
+| [openspec-sync-specs](plugins/openspec/skills/openspec-sync-specs/SKILL.md) | Intelligently merge delta specs into main specs without archiving. |
+| [openspec-archive-change](plugins/openspec/skills/openspec-archive-change/SKILL.md) | Verify, synchronize when needed, and archive a completed change. |
 
-When the project designates OpenSpec, it owns product behavior contracts and
-native change artifacts; work items link them. Otherwise follow the existing
-project contract process. Select one execution controller for its active tasks;
-do not run OpenSpec apply and another implementation controller for the same
-scope simultaneously. The
-plugin supplies skills but not the CLI. Follow the
-[official OpenSpec installation guide](https://github.com/Fission-AI/OpenSpec/blob/main/docs/installation.md).
-For a new project, `openspec init --tools none` avoids generating a second set
-of tool skills. Keep an existing project's OpenSpec configuration.
+When OpenSpec owns product behavior, its main specs and delta specs remain the
+contract. Work records link those artifacts instead of duplicating their design
+or tasks. One execution controller governs an active scope, and installation
+alone does not authorize implementation, commits, publication, or external sync.
+
+Skill discovery and symbolic-link behavior follow the
+[official Codex skills documentation](https://learn.chatgpt.com/docs/build-skills).

@@ -22,12 +22,21 @@ requirements and verify the main specs before archive. For an abandoned code
 branch, do not sync its unadopted requirements. Record the abandonment reason,
 last SHA, and useful evidence in the configured work item, then use the
 existing archive procedure's warnings and choices without inventing a main
-contract. `archived` means preserved history. Route work-item updates through
-docs-skills when available or the local `.docs-schema` and normal file tools
-otherwise. Do not create a document branch.
+contract. `archived` means preserved history. Route work-item updates through a
+current host-listed documentation skill or the local `.docs-schema` and normal
+file tools otherwise. Do not create a document branch.
 If a change mixes adopted and unadopted requirements, reconcile its delta
 artifacts first so the sync input describes only adopted behavior; preserve
 the discarded rationale in the work item or archived change history.
+
+A companion skill is available only when the current host's skill catalog lists
+it. Resolve and read/invoke the exact installed name and resource path reported
+by that catalog. A vendor checkout, sibling folder, symlink target, or plugin
+cache entry is not availability. For required history capture, use a listed
+documentation skill; otherwise apply the configured policy with the
+project-owned manifest, lifecycle, template, checker, and ordinary file tools.
+Do not read or install an unlisted skill. Spec synchronization never depends on
+another skill: the full native fallback is included in step 4.
 
 **Store selection:** If the user names a store (a store is a standalone OpenSpec repo registered on this machine) or the work lives in one, run `openspec store list --json` to discover registered store ids, then pass `--store <id>` on the commands that read or write specs and changes (`new change`, `status`, `instructions`, `list`, `show`, `validate`, `archive`, `doctor`, `context`, `view`). Once selected, treat `--store <id>` as sticky for the rest of the workflow. Every unscoped example of those commands below is shorthand: before running it, append the flag. For example, run `openspec status --change "<name>" --json --store "<id>"`, not the unscoped form shown below. Other commands do not take the flag. Hints printed by commands already carry the flag; keep it on follow-ups. Without a store, commands act on the nearest local `openspec/` root.
 
@@ -139,7 +148,64 @@ the discarded rationale in the work item or archived change history.
    form of main specs produced by this merge; do not use them as archive guidance,
    change CLI behavior, or copy the rule text into any output file.
 
-   Then run the `openspec-sync-specs` workflow inline (agent-driven intelligent merge) for change '<name>', passing the delta spec analysis and the fetched specs-rule snapshot from above, and wait for it to finish. The inline sync must reuse that snapshot without fetching `specs` instructions again. Do not delegate it to a background task — step 5 would move `changeRoot` out from under a sync that is still reading it, leaving the change archived and the main specs never updated. If your agent can only run it by delegation, delegate synchronously and wait for the result.
+   Perform the sync synchronously before moving `changeRoot`. If the current
+   host lists `openspec-sync-specs`, it may be invoked inline with the complete
+   `existingOutputPaths` list and the fetched specs-rule snapshot; wait for it
+   and do not fetch the snapshot again. If the host does not list that skill,
+   do not read its sibling folder. Perform this native fallback directly:
+
+   1. For every path in `artifactPaths.specs.existingOutputPaths`, derive its
+      complete `<capability-path>` beneath the change's `specs/` directory. Read
+      the whole delta and corresponding main spec at
+      `<planningHome.root>/openspec/specs/<capability-path>/spec.md`. Do not
+      infer, omit, or add delta paths.
+   2. Merge semantic requirement blocks into a single `## Requirements` section
+      in the main spec. For ADDED, add a missing requirement; when its name
+      already exists, update it as an implicit MODIFIED, or make no change when
+      it already matches. For MODIFIED, apply its statement and named scenario
+      changes while preserving every existing scenario or other content the
+      delta does not change; a target that already carries those changes is a
+      no-op. For REMOVED, remove the complete named requirement block, or treat
+      its absence as an already-applied no-op. For RENAMED, replace the exact
+      FROM heading with TO and preserve its body. If FROM is absent and TO is
+      present, accept a no-op only after verifying that TO's body and the
+      delta-named content match the intended already-applied result. Stop on
+      unresolved states such as an actual MODIFIED target that is absent, an
+      ambiguous requirement name, both rename names being present, neither
+      rename name being present, or a rename destination whose body conflicts.
+      Never copy delta operation headings into a main spec and never guess.
+   3. For a new capability, create the main spec only from valid ADDED
+      requirements. Use the delta's `## Purpose` body when present, otherwise a
+      brief visible TBD Purpose, then add one canonical `## Requirements`
+      section. For an existing capability, its Purpose is authoritative; do not
+      replace it with a delta Purpose. Apply the fetched artifact `rules` to the
+      content and form without copying their text into the spec.
+   4. If removal would leave no requirement blocks, delete the main `spec.md`
+      and then its empty capability directory only when all of these hold: this
+      run actually removed the final requirement; the pre-sync file was not
+      already empty; it has a `## Purpose`; every other nonblank line belongs to
+      its title, Purpose, Requirements header, canonical requirements,
+      scenarios, or fenced examples; the change's `.openspec.yaml` declares
+      `retire_capabilities: true`; and the resolved file remains inside the real
+      main specs root without following a capability-directory symlink outside
+      it. If any condition fails, leave that capability unchanged, report the
+      exact blocker (including a missing marker when that is the only issue),
+      and stop before archive. Never leave an empty `## Requirements` section.
+   5. Preserve main-spec order and all content not named by the delta. The merge
+      must be idempotent: repeating it yields no further change. After all
+      selected paths are merged, run `openspec validate --specs` with the same
+      selected-root flags. A non-zero result stops the archive; do not claim the
+      sync succeeded or move the change.
+   6. Retain a merge summary for the archive result: requirements
+      added/modified/removed/renamed per capability, every new spec with a TBD
+      Purpose, and every retired `spec.md` with its prior Purpose. For a retired
+      file in the caller's checkout, include a pasteable checkout-scoped Git
+      recovery command; for a selected external store, give store-scoped
+      recovery guidance instead.
+
+   Whether the host-listed skill or native fallback performed the merge, keep it
+   synchronous. A background sync can lose its input when step 5 moves the
+   change.
 
    Then re-run the comparison from the top of this step against every capability that has a delta spec in `artifactPaths.specs.existingOutputPaths` — not only the ones the sync reports it touched. A successful sync leaves nothing left to apply, so each capability must now read as already synced:
    - ADDED requirements present
@@ -194,7 +260,9 @@ the discarded rationale in the work item or archived change history.
 - Don't block archive on warnings - just inform and confirm
 - Preserve .openspec.yaml when moving to archive (it moves with the directory)
 - Show clear summary of what happened
-- If sync is requested, run the `openspec-sync-specs` workflow inline (agent-driven)
+- If sync is requested, use a host-listed `openspec-sync-specs` skill inline or
+  perform step 4's native intelligent merge; never read or require an unlisted
+  sibling skill
 - Never archive while a spec sync is still in flight — run the sync inline and verify the main specs before moving `changeRoot`
 - If delta specs exist, always run the sync assessment and show the combined summary before prompting
 - Apply relevant runtime context and report conflicts; operation guidance remains advisory

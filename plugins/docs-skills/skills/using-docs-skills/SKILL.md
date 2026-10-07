@@ -5,6 +5,16 @@ description: Use to route repository document discovery, writing, placement, man
 
 # Using Docs Skills
 
+Treat another skill as available only when the current host's skill catalog
+lists it. A sibling directory, vendor checkout, symlink target, or plugin cache
+entry is not availability. Resolve and read/invoke the exact installed name and
+resource path reported by that catalog; the relative links below identify the
+compatible owner but are not a discovery path. Invoke a listed owner when it
+applies. When it is not listed, complete the bounded fallback below from
+effective project rules, the project-owned schema or native tool, and ordinary
+file tools. Do not read an unlisted skill's folder or templates, install it
+silently, or route repeatedly.
+
 Read effective project instructions and their referenced configuration. Read
 root `AGENTS.local.md` when it exists. Shared capture, persistence, audience
 and document rules stay in their existing policy sources. When history capture is
@@ -16,9 +26,13 @@ without silently creating a second history. Reader-facing document work that
 does not require work records can proceed under its own project rules.
 Installation alone does not enable history capture. Installation and project
 configuration follow the source README and its templates. Ordinary document
-work uses the effective settings and resolves only gaps material to that work. Use
-[maintaining-work-records](../maintaining-work-records/SKILL.md)
-for configured capture and local record types.
+work uses the effective settings and resolves only gaps material to that work.
+When the host lists
+[maintaining-work-records](../maintaining-work-records/SKILL.md), use it for
+configured capture and local record types. Otherwise read the canonical
+repository's local manifest, lifecycle, and relevant template; locate records
+with its checker or search tools, make the policy-required update, and run its
+validator. Do not use the bundled starter in place of an existing local schema.
 
 Keep schema paths/types in the canonical repository's `.docs-schema`, formal
 store configuration in its native tool, and document commands/conventions in
@@ -31,11 +45,14 @@ scope, consequential decisions and rationale, progress, evidence, unresolved
 issues, and next action. The recorder owns capture criteria and policy defaults;
 message length or type does not determine significance. A separate `decision`,
 `design`, `plan`, or `tdd` requires its registered creation condition.
-When parallel agents need durable history, use
-[coordinating-parallel-document-work](../coordinating-parallel-document-work/SKILL.md)
-to give independent tasks separate linked work items and one owner for each
-overlapping artifact. The local schema controls whether child nodes are
-available; do not silently replace an older schema.
+When parallel agents need durable history and the host lists
+[coordinating-parallel-document-work](../coordinating-parallel-document-work/SKILL.md),
+use it. Otherwise give each independently writable artifact one owner; create
+separate child work items only when the local schema supports
+`parent_work_item_id`; have read-only workers return evidence to an authorized
+recorder; and keep one Git/index integrator for a shared checkout. The local
+schema controls whether child nodes are available; do not silently replace an
+older schema.
 
 ## Find the authoritative content
 
@@ -56,30 +73,48 @@ that an unrelated document type supplies them. Use the following owners:
   it violates one. If the active schema cannot provide a required spec, surface
   the configuration problem. Without OpenSpec, follow the project's configured
   contract process; do not replace any required spec with a local plan.
-- **Research experiments:** Use research-skills when installed, or the
-  project's configured experiment workflow. That workflow owns its scientific
-  protocol, template, root, and evidence. Link it from the work item. If none
+- **Research experiments:** Use research-skills only when the current host lists
+  it; otherwise use the project's configured experiment workflow. That workflow
+  owns its scientific protocol, template, root, and evidence. Link it from the
+  work item. If none
   is configured, surface the gap instead of inventing a record format. This
   router handles document placement and edits without changing the scientific
   rules or sending the work back in a loop.
-- **Local work history and weekly reports:**
-  [maintaining-work-records](../maintaining-work-records/SKILL.md) owns them.
-- **Reusable sourced note:**
-  [curating-reference-notes](../curating-reference-notes/SKILL.md) owns its
-  evidence and validity; the local `reference-note` schema owns its path.
-- **Reader-facing documentation:**
-  [maintaining-documentation](../maintaining-documentation/SKILL.md) owns
-  focused edits and retirement; [auditing-documentation](../auditing-documentation/SKILL.md)
-  owns factual audits. A requested read-only review remains read-only.
-- **Editable diagrams:** [maintaining-diagrams](../maintaining-diagrams/SKILL.md)
-  owns representation and verification; the containing artifact keeps its
-  owner and path.
+- **Local work history and weekly reports:** When listed, use
+  [maintaining-work-records](../maintaining-work-records/SKILL.md). Otherwise
+  apply the configured capture policy and local schema directly: use `list` and
+  `tree` to locate the owning record, append material events with actual
+  authorship, reconcile lifecycle/current state/next action, and validate. For
+  a manually requested weekly report, use the registered period and template,
+  gather events with `events --week`, verify linked sources, and keep corrections.
+- **Reusable sourced note:** When listed, use
+  [curating-reference-notes](../curating-reference-notes/SKILL.md). Otherwise
+  update an existing note or create one at the repository-designated or locally
+  registered path. Separate verified facts from inference, retain sources and
+  validity/recheck bounds, apply its lifecycle, check links, and validate a
+  registered record.
+- **Reader-facing documentation:** When listed, use
+  [maintaining-documentation](../maintaining-documentation/SKILL.md) for focused
+  edits and retirement, and
+  [auditing-documentation](../auditing-documentation/SKILL.md) for factual audits.
+  Otherwise read the relevant guide and source of truth, edit the existing
+  suitable page with focused current claims, check affected commands and links,
+  and report verification limits. For an audit, make no files or mutations;
+  report each claim or gap, its source, reader impact, and smallest correction.
+- **Editable diagrams:** When listed, use
+  [maintaining-diagrams](../maintaining-diagrams/SKILL.md). Otherwise keep the
+  containing artifact's owner and editable format, show only source-backed
+  relationships, trace representative paths, and use an existing renderer or
+  syntax check when available. Report an unverified render instead of installing
+  another tool.
 
 Domain workflows still determine their content, authorization, and lifecycle.
 When they forward document work here, resolve the correct source and location,
 perform the file operation with their rules, then return evidence to the caller.
-Use specialized installed workflows or native commands where they own an
-artifact, especially OpenSpec. Do not route back and forth indefinitely.
+Use host-listed specialized workflows or native commands where they own an
+artifact, especially OpenSpec. When no specialized workflow is listed, follow
+the project procedure and native tool directly without weakening its checks.
+Do not route back and forth indefinitely.
 
 Preserve the chain from original intent and necessary derived requirements to
 spec criteria, active tasks, assignment results, review findings, and evidence.

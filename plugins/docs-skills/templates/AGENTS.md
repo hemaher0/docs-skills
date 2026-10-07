@@ -30,12 +30,16 @@ with ordinary file tools if the plugin is unavailable. Preserve existing local
 schemas until explicit migration.
 
 Development/research owners supply governing content, criteria, revision,
-evidence, and decisions. Documentation skills own placement, record edits,
-reader-facing prose, and factual audits; the selected domain workflow keeps
-scheduling, technical verdicts, and temporary retention. Formal contracts
-follow the project's designated owner. Git owns actual checkout and history
-mutations. Current owners, handoffs, findings and progress live in their work
-records rather than configuration.
+evidence, and decisions. Use documentation skills for placement, record edits,
+reader-facing prose, and factual audits only when the current host lists them.
+Resolve the exact installed name/resource path from that catalog rather than an
+adjacent vendor or cache copy. When none is listed, use these project rules, the
+project-owned schema, native domain tools, and ordinary file tools for the same
+responsibilities without reading an unlisted skill. The selected domain
+workflow keeps scheduling, technical verdicts, and temporary retention. Formal
+contracts follow the project's designated owner. Git owns actual checkout and history mutations. Current
+owners, handoffs, findings and progress live in their work records rather than
+configuration.
 
 Read and follow root `AGENTS.local.md` when it exists. Local overrides cannot
 broaden the shared capture, persistence, audience, or permission policy.

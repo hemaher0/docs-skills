@@ -56,9 +56,16 @@ claims to the caller. The development workflow owns subsequent generalization,
 affected re-verification/review, and completion; Git owns candidate/message
 review and actual commits. This skill adds no independent finalization loop.
 
-When the requested documentation includes a diagram, use
-[maintaining-diagrams](../maintaining-diagrams/SKILL.md) for its representation
-and verification while keeping this document's source and placement rules.
+When the requested documentation includes a diagram and the current host lists
+[maintaining-diagrams](../maintaining-diagrams/SKILL.md), use it for
+representation and verification while keeping this document's source and
+placement rules. Resolve its exact installed resource from that catalog; the
+relative link is documentation, not discovery. A sibling or vendor folder alone
+is not availability. When it is not listed, keep the repository's existing
+editable format, choose a small Mermaid or text diagram only when no convention
+exists, derive every element and relationship from the governing sources, trace
+representative paths, and use an existing renderer or syntax check when
+available. Report an unverified render; do not install another skill or renderer.
 
 ## Verify the result
 
@@ -70,11 +77,19 @@ regenerate unrelated documents merely to complete a small edit. State what
 was checked and any material verification gap.
 
 OpenSpec proposals, delta specs, designs, tasks, sync, and archive state remain
-owned by the OpenSpec workflow. If that workflow is installed, use it for a
-request to change those artifacts. Otherwise follow the project's OpenSpec
-procedure; do not edit the artifacts through this general documentation skill.
+owned by the OpenSpec workflow. Use its skill only when the current host lists
+it, resolving the exact installed name/resource path from that catalog rather
+than an adjacent copy. Otherwise follow the project's native OpenSpec procedure
+and CLI-selected paths, instructions, rules, and validation; absence of a
+companion skill does not transfer those artifacts to this general documentation
+workflow.
 
 For a separately requested internal reference note, use
-[curating-reference-notes](../curating-reference-notes/SKILL.md) and its
-repository-designated storage rules. Do not place private working context in
-reader-facing documentation.
+[curating-reference-notes](../curating-reference-notes/SKILL.md) only when the
+current host lists it, resolving the exact installed resource from that catalog
+rather than the relative documentation link. Otherwise follow the
+repository-designated reference root or registered `reference-note` path and
+template with ordinary file tools: update an existing note first, distinguish
+verified facts from inference, retain sources and validity bounds, check links,
+and validate registered records. Do not read an unlisted skill or place private
+working context in reader-facing documentation.

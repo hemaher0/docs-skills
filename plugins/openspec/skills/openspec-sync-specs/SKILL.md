@@ -18,8 +18,19 @@ unadopted requirements; preserve the change and its work-item history instead.
 Follow the project's work-history capture policy; a configured storage
 location does not enable capture. When that policy requires it, append the
 sync decision and resulting main-spec links to the owning work
-item through docs-skills when available or local `.docs-schema` and normal file
-tools otherwise. Keep OpenSpec CLI-selected paths and native filenames.
+item through a current host-listed documentation skill or local `.docs-schema`
+and normal file tools otherwise. Keep OpenSpec CLI-selected paths and native
+filenames.
+
+A documentation skill is available only when the current host's skill catalog
+lists it. Resolve and read/invoke the exact installed name and resource path
+reported by that catalog. A vendor checkout, sibling folder, symlink target, or
+plugin cache entry is not availability. For required history capture, use a
+listed skill; otherwise apply the configured policy with the project-owned
+manifest, lifecycle, template, checker, and ordinary file tools. Do not read or
+install an unlisted skill. If the project requires capture but has no configured local
+procedure, report that configuration gap without weakening this sync's merge or
+validation.
 
 This is an **agent-driven** operation - you will read delta specs and directly edit main specs to apply the changes. This allows intelligent merging (e.g., adding a scenario without copying the entire requirement).
 

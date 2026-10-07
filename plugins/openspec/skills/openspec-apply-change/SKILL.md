@@ -21,9 +21,17 @@ spec, verify that contract directly. Compare code and tests to the applicable
 spec. Follow the project's work-history capture policy; a configured storage
 location does not enable capture. When that policy requires it, keep the owning
 work-item timeline linked and current through an
-available document workflow; otherwise use local `.docs-schema` and normal
-file tools. In parallel work, use the assigned child record when supported by
-that schema. Do not create a document branch.
+a current host-listed document workflow; otherwise use local `.docs-schema`
+and normal file tools. In parallel work, use the assigned child record when
+supported by that schema. Do not create a document branch.
+
+A companion skill is available only when the current host's skill catalog lists
+it. Resolve and read/invoke the exact installed name and resource path reported
+by that catalog. A vendor checkout, sibling folder, symlink target, or plugin
+cache entry is not availability. For required history capture, use a listed
+documentation skill; otherwise apply the configured policy with the
+project-owned manifest, lifecycle, template, checker, and ordinary file tools.
+Do not read or install an unlisted skill.
 
 **Store selection:** If the user names a store (a store is a standalone OpenSpec repo registered on this machine) or the work lives in one, run `openspec store list --json` to discover registered store ids, then pass `--store <id>` on the commands that read or write specs and changes (`new change`, `status`, `instructions`, `list`, `show`, `validate`, `archive`, `doctor`, `context`, `view`). Once selected, treat `--store <id>` as sticky for the rest of the workflow. Every unscoped example of those commands below is shorthand: before running it, append the flag. For example, run `openspec status --change "<name>" --json --store "<id>"`, not the unscoped form shown below. Other commands do not take the flag. Hints printed by commands already carry the flag; keep it on follow-ups. Without a store, commands act on the nearest local `openspec/` root.
 
@@ -64,7 +72,13 @@ that schema. Do not create a document branch.
    - Optional `operationGuidance`: current advisory guidance for apply
 
    **Handle states:**
-   - If `state: "blocked"` (missing artifacts): show message, suggest using `$openspec-continue-change (Codex) or /openspec-continue-change (other agents)` (if it is not installed, run `openspec status --change "<name>" --json` to see the next artifact and `openspec instructions <artifact-id> --change "<name>" --json` for how to create it)
+   - If `state: "blocked"` (missing artifacts): show the missing artifacts.
+     Suggest `$openspec-continue-change (Codex) or /openspec-continue-change
+     (other agents)` only when the current host lists it. Otherwise run
+     `openspec status --change "<name>" --json`, then `openspec instructions
+     <artifact-id> --change "<name>" --json`; for authorized artifact creation,
+     read dependencies and use the returned template, rules, instruction, and
+     concrete output path with ordinary file tools. Re-run status and validation.
    - If `state: "all_done"`: first verify any required product contract and
      implementation/test evidence, then suggest archive only if they agree
    - Otherwise: proceed to implementation
@@ -112,9 +126,11 @@ that schema. Do not create a document branch.
    - Continue to next task
 
    Diagnose ordinary errors and resolve factual gaps within the authorized goal.
-   Update governing artifacts through their owning workflow when the current
-   authorization covers that refinement. Continue independent work while a
-   dependent task remains blocked.
+   Update governing artifacts through a host-listed owning skill when available,
+   or through native `status`/`instructions`, CLI-selected paths, project rules,
+   and validation when it is not. Use the current authorization only when it
+   covers that refinement. Continue independent work while a dependent task
+   remains blocked.
 
    **Pause dependent work when:**
    - A material requirement or decision cannot be resolved from available evidence
@@ -127,7 +143,8 @@ that schema. Do not create a document branch.
    Display:
    - Tasks completed this session
    - Overall progress: "N/M tasks complete"
-   - If all done: suggest archive
+   - If all done: suggest a host-listed archive skill, or the project's native
+     archive procedure when it is unavailable
    - If paused: explain why and wait for guidance
 
 **Output During Implementation**
@@ -158,7 +175,11 @@ Working on task 4/7: <task description>
 - [x] Task 2
 ...
 
-All tasks complete! You can archive this change with `$openspec-archive-change (Codex) or /openspec-archive-change (other agents)`.
+All tasks complete! If the current host lists it, you can archive this change
+with `$openspec-archive-change (Codex) or /openspec-archive-change (other
+agents)`. Otherwise use the project's native archive procedure, including delta
+assessment, intelligent main-spec merge, spec validation, and post-sync
+comparison before moving the change.
 ```
 
 **Output On Pause (Issue Encountered)**
@@ -182,7 +203,12 @@ What would you like to do?
 ```
 
 **Guardrails**
-- For a task explicitly updating reader-facing repository documentation outside OpenSpec change and spec artifacts, use an available document workflow; otherwise follow the repository's documentation conventions. Keep OpenSpec artifacts in this workflow either way.
+- For a task explicitly updating reader-facing repository documentation outside
+  OpenSpec change and spec artifacts, use a document workflow only when the
+  current host lists it. Otherwise follow the repository's documentation
+  conventions with ordinary file tools: edit the existing suitable page from
+  its source of truth, keep the change focused, and check affected commands and
+  links. Keep OpenSpec artifacts in this workflow either way.
 - Keep going through tasks until done or blocked
 - Always read context files before starting (from the apply instructions output)
 - Resolve factual ambiguity from available context; ask only for a material unresolved decision

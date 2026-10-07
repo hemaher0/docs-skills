@@ -43,6 +43,10 @@ change the repository. Do not install dependencies or regenerate large output
 solely to perform an audit.
 
 OpenSpec change artifacts have their own lifecycle. When the request concerns
-their internal consistency or state, use an available OpenSpec workflow or the
-project's OpenSpec procedure. This skill may audit reader-facing documentation
-*about* OpenSpec without taking ownership of those artifacts.
+their internal consistency or state, use an OpenSpec skill only when the current
+host lists it, resolving the exact installed name/resource path from that
+catalog; a vendor or cache copy alone is not availability. When none is listed,
+use the project's native OpenSpec procedure and read-only CLI commands such as
+`status`, `show`, `instructions`, and `validate` as appropriate. Do not read an
+unlisted skill or weaken the native checks. This skill may audit reader-facing
+documentation *about* OpenSpec without taking ownership of those artifacts.

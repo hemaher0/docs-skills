@@ -34,20 +34,26 @@ remote sync also follows that policy and existing authority. Installation alone
 does not authorize commits or publication. Record-only persistence uses checks
 for its actual artifact and does not restart an implementation finalization
 cycle. Preserve legitimate historical requests, decisions, and attribution.
-For parallel agents, follow
+For parallel agents, use
 [coordinating-parallel-document-work](../coordinating-parallel-document-work/SKILL.md)
-before editing the canonical repository. The current local schema determines
-whether each task may own a linked child work item; shared Git operations still
-need one integrator.
+only when the current host lists it; a sibling or vendor folder alone is not
+availability. Resolve and use the exact installed name/resource path from that
+catalog rather than the relative documentation link. Otherwise assign one
+writer to each record or overlapping artifact, create linked child work items
+only when the local schema supports `parent_work_item_id`, have read-only
+workers return evidence to an authorized recorder, and designate one Git/index
+integrator for a shared checkout. Do not read or require the unlisted companion
+skill. The current local schema determines whether each task may own a linked
+child work item.
 
 ## Capture a topic's history
 
 Find an existing root or child work item with `python3 .docs-schema/records.py
 list`, search, and generated tree relations when available. Keep one root per
 captured topic and one child per delegated task needing separate history under
-a graph-capable schema; each has its own manifest path. Follow the established project capture
-policy. When capture is enabled without a more specific policy, use selective
-capture: preserve information that changes the goal or accepted scope, explains
+a graph-capable schema; each has its own manifest path. Follow the established
+project capture policy. When capture is enabled without a more specific policy,
+use selective capture: preserve information that changes the goal or accepted scope, explains
 a consequential decision, establishes progress or verification, or affects
 remaining work and continuation. Group discussion supporting the same outcome
 into an accurate entry; the unit of history is a meaningful change, not a message.

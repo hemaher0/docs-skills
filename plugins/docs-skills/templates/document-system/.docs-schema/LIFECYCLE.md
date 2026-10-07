@@ -39,7 +39,17 @@ stateDiagram-v2
 
 1. Preserve material goal, decision, progress, evidence and continuation changes in the owning root/child under the established capture policy. Discovery uses generated `list` and `tree`; weekly aggregation uses `events --week`. Add specialized records only when their condition and purpose apply.
 2. Read the project's governing behavior contract. When OpenSpec owns it, write changed requirements/scenarios through its CLI-selected workflow and verify against that contract. Link the working spec's necessary derivations, governing criteria, active tasks, and evidence without creating a rival spec or second active plan/controller.
-3. A research experiment uses research-skills' configured root and template. Its protocol and evidence stay in that record; the work item links it and records the discussion or decision.
-4. Git performs authorized integration and reports the actual target/SHA and checks. Forward remaining contract sync/archive to the formal owner when applicable; reuse completed transitions. Reconcile requirements, review outcomes, evidence, blockers, and required finalization before completing/archiving history.
+3. A research experiment uses a research skill only when the current host lists
+   it, resolving the exact installed name/resource path from that catalog rather
+   than an adjacent copy; otherwise it uses the project's configured experiment
+   procedure, root, and template. Its protocol and evidence stay in that record;
+   the work item links it and records the discussion or decision. A vendor or
+   cache copy alone is not availability.
+4. Git performs authorized integration and reports the actual target/SHA and
+   checks. Forward remaining contract sync/archive to the exact host-listed
+   formal owner when available, or use the project's native formal-store
+   procedure when it is not; never read an adjacent vendor/cache copy. Reuse
+   completed transitions. Reconcile requirements, review outcomes, evidence,
+   blockers, and required finalization before completing/archiving history.
 5. On abandonment, record the last SHA and reason, preserve useful evidence, and settle domain artifacts through their owners without adopting unaccepted requirements. Work-item archival retains history. Git resource cleanup and temporary domain-record disposal remain separate decisions.
 6. A weekly report is created only on manual request from events in the manifest's configured timezone and week interval and linked authoritative sources. It is a summary, never a second source of truth.

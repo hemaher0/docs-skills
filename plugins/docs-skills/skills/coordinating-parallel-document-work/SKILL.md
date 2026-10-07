@@ -24,10 +24,18 @@ do not maintain an index file.
 Record the assigned child IDs and actual assigned workspace locations in the root's
 delegation event so unfinished work can be recovered before integration.
 
-Apply [maintaining-work-records](../maintaining-work-records/SKILL.md)'s capture
-criteria under the established project policy. The root preserves the goal,
-coordination decisions and accepted outcomes; each child preserves the relevant
-assignment, decisions, progress, evidence, code identity and continuation state.
+If the current host lists
+[maintaining-work-records](../maintaining-work-records/SKILL.md), apply its
+record procedure at the exact installed name/resource path reported by that
+catalog. A sibling or vendor folder alone is not availability. When it is not
+listed, apply the established capture policy directly with the canonical
+repository's local manifest, lifecycle, and work-item template: locate the root
+with `records.py list` and `tree` or search tools, append material events with
+actual authorship, reconcile current state and next action, and run
+`records.py validate`. Do not read an unlisted skill or its bundled templates.
+The root preserves the goal, coordination decisions and accepted outcomes; each
+child preserves the relevant assignment, decisions, progress, evidence, code
+identity and continuation state.
 The child's parent ID supplies the link; the root summarizes its accepted outcome
 without copying the child's event stream. The resuming owner reads relevant
 history; give fresh workers bounded context, requirements/revision, authority,

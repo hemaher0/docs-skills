@@ -36,16 +36,22 @@ its role has ended and the repository's policy permits that action. Do not
 copy private source text, local identifiers, secrets, or sensitive data into
 a public document.
 
-Reader-facing repository documentation uses
-[maintaining-documentation](../maintaining-documentation/SKILL.md) when that
-separate update is requested. OpenSpec artifacts and managed experiment
-records remain under their owning workflows. This skill does not make those
-updates as a side effect of curating a reference note.
+For a separately requested reader-facing update, use
+[maintaining-documentation](../maintaining-documentation/SKILL.md) only when
+the current host lists it; a sibling or vendor folder alone is not availability.
+Resolve its exact installed resource from that catalog rather than the relative
+documentation link. Otherwise follow the repository's documentation rules with
+ordinary file tools: edit the existing suitable page from its current source of
+truth, keep the change focused, and check affected links and commands. Do not
+read or require the unlisted companion. OpenSpec artifacts and managed
+experiment records remain under their native or configured workflows. This skill does not make
+those updates as a side effect of curating a reference note.
 
 ## Verify and finish
 
 Re-read the changed note for accurate provenance, current versus superseded
 claims, and enough context for a later reader to continue the work. Check
-affected local links and run the local schema validator when present. Follow any repository-specific review or local commit
-requirement for this storage area. Do not infer permission to push, publish,
-mirror, or change another repository from a request to maintain a note.
+affected local links and run the local schema validator when present. Follow any
+repository-specific review or local commit requirement for this storage area.
+Do not infer permission to push, publish, mirror, or change another repository
+from a request to maintain a note.

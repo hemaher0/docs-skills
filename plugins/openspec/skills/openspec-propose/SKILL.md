@@ -20,18 +20,27 @@ report the schema/configuration problem instead of replacing the contract with
 a local plan. OpenSpec filenames and paths remain CLI-owned. Follow the
 project's work-history capture policy; a configured storage location does not
 enable capture. When that policy requires it, link this change from its owning
-work item through an available document workflow,
-or the project's local `.docs-schema` and ordinary file tools when none is
-installed. In parallel work, use the assigned child record when supported.
+work item through a current host-listed document workflow, or the project's
+local `.docs-schema` and ordinary file tools when none is listed. In parallel
+work, use the assigned child record when supported.
+
+A companion skill is available only when the current host's skill catalog lists
+it. Resolve and read/invoke the exact installed name and resource path reported
+by that catalog. A vendor checkout, sibling folder, symlink target, or plugin
+cache entry is not availability. For required history capture, use a listed
+document workflow; otherwise apply the configured policy with the project-owned
+manifest, lifecycle, template, checker, and ordinary file tools. Do not read or
+install an unlisted skill.
 
 **Planning boundary**: This workflow creates planning artifacts; the apply
 workflow owns implementation. If the user requested only a proposal or plan,
 present the artifacts and stop before implementation. If the current request
 already includes implementation, present the prepared artifacts and continue
-through the apply workflow within that authorization once required planning
-checks and project review gates are satisfied. Resolve a material unknown or
-required approval before dependent work. Do not require a new user request or
-repeat an approval that already covers the same scope.
+through a host-listed apply skill or the native fallback below within that
+authorization once required planning checks and project review gates are
+satisfied. Resolve a material unknown or required approval before dependent
+work. Do not require a new user request or repeat an approval that already
+covers the same scope.
 
 I'll create a change with the artifacts your schema defines. With the default spec-driven schema that is:
 - proposal.md (what & why)
@@ -41,8 +50,12 @@ I'll create a change with the artifacts your schema defines. With the default sp
 
 `<capability-path>` is the spec directory relative to `specs/` (for example, `user-auth` or `identity/user-auth`). Preserve an existing capability's full path and follow the project's established organization for new capabilities.
 
-Use the apply workflow for authorized implementation; invoking this planning
-skill alone does not authorize code changes or publication.
+For authorized implementation, use the apply skill only when the current host
+lists it. Otherwise use `openspec instructions apply --change "<name>" --json`
+and the project's development procedure: read every returned context file,
+follow the CLI state/instruction and project checks, implement and verify each
+task, and update its checkbox only after its criteria pass. Invoking this
+planning skill alone does not authorize code changes or publication.
 
 ---
 
@@ -117,10 +130,22 @@ skill alone does not authorize code changes or publication.
         - `resolvedOutputPath`: Resolved path or pattern to write the artifact
         - `dependencies`: Completed artifacts to read for context
       - Read any completed dependency files for context - always re-read them from disk, even if you saw them earlier in the conversation (the user may have edited them)
-      - If the `instruction` field delegates creation to a specific skill or command, invoke it to produce the artifact instead of writing the file yourself, then verify the artifact file exists at `resolvedOutputPath`
+      - If the `instruction` field delegates creation to a specific skill,
+        invoke it only when the current host lists it. Otherwise produce the
+        requested result directly from the returned template/instruction,
+        project procedure, and ordinary file tools. If it delegates to a
+        required native command, use that command or report the actual missing
+        runtime prerequisite. Never read or install an unlisted skill. Verify
+        the artifact file exists at `resolvedOutputPath`.
       - Otherwise create the artifact file using `template` as the structure and write it to `resolvedOutputPath`. If `resolvedOutputPath` is a glob, follow `instruction` to choose the concrete file path
       - Apply `context` and `rules` as constraints - but do NOT copy them into the file
-      - If the user explicitly requests a diagram in this artifact or its active instructions require one, use an available document workflow to route its representation and verification. Otherwise follow the project's diagram convention. Keep the CLI-provided template, artifact path, and rules in control.
+      - If the user explicitly requests a diagram in this artifact or its active
+        instructions require one, use a document workflow only when the current
+        host lists it. Otherwise follow the project's diagram convention with
+        ordinary file tools, keep the diagram editable, trace its relationships
+        against governing sources, and use an existing renderer or syntax check
+        when available. Keep the CLI-provided template, artifact path, and rules
+        in control.
       - Show brief progress: "Created <artifact-id>"
 
    b. **Continue until every artifact in the required set exists (not just `apply.requires`)**
@@ -158,16 +183,23 @@ After completing all artifacts, summarize:
 - Change name and location
 - List of artifacts created with brief descriptions, plus any conditional artifact you skipped and why
 - What's ready: "All artifacts needed for implementation are ready."
-- For a planning-only request, show how to request implementation with
-  `$openspec-apply-change (Codex) or /openspec-apply-change (other agents)`.
+- For a planning-only request, show
+  `$openspec-apply-change (Codex) or /openspec-apply-change (other agents)` only
+  when the host lists that skill. Otherwise explain that implementation can
+  continue through `openspec instructions apply --change "<name>" --json` and
+  the project's development procedure.
 - If implementation is already authorized and no required gate remains,
-  announce the transition and continue through the apply workflow. Otherwise
-  identify the specific input or approval needed before proceeding.
+  announce the transition and continue through a host-listed apply skill or the
+  native fallback above. Otherwise identify the specific input or approval
+  needed before proceeding.
 
 **Artifact Creation Guidelines**
 
 - Follow the `instruction` field from `openspec instructions` for each artifact type - it is the authoritative guidance, even for familiar artifact names
-- If the `instruction` field directs you to use a specific skill or command to create the artifact, invoke it instead of writing the artifact directly
+- If the `instruction` field directs you to a skill, invoke it only when the
+  current host lists it; otherwise satisfy the returned template/instruction
+  directly through the project procedure and ordinary tools. A required native
+  command remains a runtime prerequisite.
 - The schema defines what each artifact should contain - follow it
 - Read dependency artifacts for context before creating new ones
 - Use `template` as the structure for your output file - fill in its sections
@@ -176,10 +208,10 @@ After completing all artifacts, summarize:
   - These guide what you write, but should never appear in the output
 
 **Guardrails**
-- Keep artifact creation in this workflow and implementation in the apply
-  workflow. Follow the existing request's scope and required project gates;
-  planning-only work stops at the artifacts, while authorized implementation
-  can continue without a new request.
+- Keep artifact creation in this workflow and implementation in a host-listed
+  apply skill or the native apply fallback above. Follow the existing request's
+  scope and required project gates; planning-only work stops at the artifacts,
+  while authorized implementation can continue without a new request.
 - Create every artifact the apply phase transitively depends on, not just the ids listed in `apply.requires`
 - Always read dependency artifacts before creating a new one - re-read from disk, not from conversation memory (files may have changed since you last saw them)
 - Ask about ambiguities that would materially change scope, externally observable behavior, compatibility, or acceptance criteria; for minor details, make reasonable assumptions and record them

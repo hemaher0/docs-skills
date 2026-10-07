@@ -20,10 +20,16 @@ implementation, and the governing specification for intended behavior.
 Distinguish implemented, proposed, and uncertain relationships; do not infer
 design intent solely from code.
 
-For an OpenSpec artifact, follow its OpenSpec workflow for artifact paths,
-schema rules, and write approval. For a research record or another managed
-artifact, follow its owner. This skill guides the diagram's representation
-and verification; it does not authorize a new artifact or override its owner.
+For an OpenSpec artifact, use its skill only when the current host lists it; a
+vendor or cache copy alone is not availability. Resolve the exact installed
+name/resource path from that catalog rather than an adjacent copy. When none is
+listed, use the native OpenSpec CLI and project procedure to resolve artifact
+paths, instructions, schema rules, validation, and write authority. Do not read
+an unlisted skill.
+
+For a research record or another managed artifact, follow its configured owner
+or project procedure. This skill guides the diagram's representation and
+verification; it does not authorize a new artifact or override its owner.
 
 ## Choose a useful representation
 
