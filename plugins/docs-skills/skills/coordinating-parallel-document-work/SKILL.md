@@ -11,7 +11,7 @@ this skill does not dispatch extra agents or parallelize sequential implementati
 
 ## Give each task its own record
 
-Read the configured repository's local schema before dispatch. When it supports
+Read the configured repository's selected record schema before dispatch. When it supports
 `parent_work_item_id`, keep the user's topic as the root work item and assign
 each independently delegated task needing separate history a unique dated
 child work-item ID and path under the established capture policy.
@@ -19,7 +19,7 @@ Set the child's `parent_work_item_id` to the root or its owning subtask. The
 worker owns only that child's timeline and its task-specific local records;
 the coordinator owns the root timeline and integration decisions. A child
 points to its parent in metadata, so workers never edit a parent merely to add
-a backlink. Discover the tree with `python3 .docs-schema/records.py tree --work-item <id>`;
+a backlink. Discover the tree with the configured checker's `tree --work-item <id>` command;
 do not maintain an index file.
 Record the assigned child IDs and actual assigned workspace locations in the root's
 delegation event so unfinished work can be recovered before integration.
@@ -29,7 +29,7 @@ If the current host lists
 record procedure at the exact installed name/resource path reported by that
 catalog. A sibling or vendor folder alone is not availability. When it is not
 listed, apply the established capture policy directly with the canonical
-repository's local manifest, lifecycle, and work-item template: locate the root
+repository's configured schema, lifecycle, and work-item template: locate the root
 with `records.py list` and `tree` or search tools, append material events with
 actual authorship, reconcile current state and next action, and run
 `records.py validate`. Do not read an unlisted skill or its bundled templates.
@@ -42,9 +42,9 @@ history; give fresh workers bounded context, requirements/revision, authority,
 and required results. Do not close a parent while a required child outcome remains
 unresolved.
 
-If the repository's local schema cannot represent child work items, use one
+If the repository's selected record schema cannot represent child work items, use one
 designated writer and worker handoffs under that schema until an explicit
-schema migration. Installing this skill does not change the local schema.
+schema migration. Installing this skill does not change the selected record schema.
 
 ## Keep writes and Git operations separate
 

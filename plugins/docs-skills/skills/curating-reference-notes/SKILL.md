@@ -14,7 +14,7 @@ the owning work item even if no separate reference note is created.
 ## Choose the location and scope
 
 Read repository and local instructions before writing. When the configured
-canonical document repository has `.docs-schema`, follow its registered
+canonical document repository has configured record definitions, follow their registered
 `reference-note` path, template, metadata, and validity fields. Otherwise
 follow the user or repository's designated reference root. Check its
 visibility and whether it lives in a separate repository, then follow that

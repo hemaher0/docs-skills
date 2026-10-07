@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "timezone": "Asia/Seoul",
+  "week_start": "monday",
+  "types": {
+    "note": {
+      "path": "notes/{id}.md",
+      "template": "templates/note.md",
+      "create_when": "A reusable note is requested.",
+      "required_sections": ["Finding", "Sources"],
+      "required_fields": ["owner"],
+      "lifecycles": ["draft", "final"],
+      "work_item_required": false
+    }
+  }
+}

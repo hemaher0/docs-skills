@@ -20,16 +20,17 @@ report the schema/configuration problem instead of replacing the contract with
 a local plan. OpenSpec filenames and paths remain CLI-owned. Follow the
 project's work-history capture policy; a configured storage location does not
 enable capture. When that policy requires it, link this change from its owning
-work item through a current host-listed document workflow, or the project's
-local `.docs-schema` and ordinary file tools when none is listed. In parallel
+work item through a current host-listed document workflow, or configured
+project record rules and ordinary file tools when none is listed. In parallel
 work, use the assigned child record when supported.
 
 A companion skill is available only when the current host's skill catalog lists
 it. Resolve and read/invoke the exact installed name and resource path reported
 by that catalog. A vendor checkout, sibling folder, symlink target, or plugin
 cache entry is not availability. For required history capture, use a listed
-document workflow; otherwise apply the configured policy with the project-owned
-manifest, lifecycle, template, checker, and ordinary file tools. Do not read or
+document workflow; otherwise apply the configured policy with established record
+rules and ordinary file tools. Use configured templates and checkers when
+available. Do not read or
 install an unlisted skill.
 
 **Planning boundary**: This workflow creates planning artifacts; the apply

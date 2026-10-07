@@ -13,13 +13,28 @@ checkout-path override only for that same configured repository; unset/None
 values leave the shared setting in force. Preserve existing configuration
 without an automatic move or migration. Use exactly one configured
 document repository for work items, either the project repository or an
-existing document repository. In that repository, read
-`.docs-schema/manifest.json` and the relevant template. The bundled
-[starter schema](../../templates/document-system/.docs-schema/README.md)
-is for initial setup only; a versioned local schema is authoritative. If this
-skill is unavailable in a future session, project `AGENTS.md` and the local
-schema must still suffice with ordinary file tools. If the configured repository
-is inaccessible, expose the gap instead of creating a second work-item history.
+existing document repository. Read its configured custom schema, or this
+skill's bundled
+[default schema](references/schema.json), and the relevant template. Templates
+and the checker stay in this complete skill folder; no root framework copy is
+required. The [record configuration guide](references/README.md) explains the
+JSON schema and custom template lookup. A selected existing schema remains
+binding until an explicit migration.
+For a new custom type, the [schema starter](templates/custom-schema/schema.json)
+and matching [note template](templates/custom-schema/templates/note.md) are
+available alongside the seven default record templates. Retain existing type
+definitions when adding a type to an established configuration.
+
+Resolve this skill's actual installed directory and run its
+[scripts/records.py](scripts/records.py) with Python and `--root` set to the
+canonical repository. From that repository, the checker defaults to its current
+directory. It selects `.agents/config/docs-skills/schema.json` when present,
+otherwise this skill's bundled definitions; `--schema` selects another complete
+JSON definition explicitly. Invalid selected schemas report an error instead
+of falling back. When this skill is unavailable, use established project record
+rules and ordinary file tools without reading an unlisted skill's resources.
+If the configured repository is inaccessible, expose the gap instead of
+creating a second work-item history.
 
 Use the canonical repository's configured checkout, branch, review, and access
 policy. A dedicated document repository may explicitly require primary-branch
@@ -40,20 +55,22 @@ only when the current host lists it; a sibling or vendor folder alone is not
 availability. Resolve and use the exact installed name/resource path from that
 catalog rather than the relative documentation link. Otherwise assign one
 writer to each record or overlapping artifact, create linked child work items
-only when the local schema supports `parent_work_item_id`, have read-only
+only when the selected record schema supports `parent_work_item_id`, have
+read-only
 workers return evidence to an authorized recorder, and designate one Git/index
 integrator for a shared checkout. Do not read or require the unlisted companion
-skill. The current local schema determines whether each task may own a linked
-child work item.
+skill. The selected record schema determines whether each task may own a
+linked child work item.
 
 ## Capture a topic's history
 
-Find an existing root or child work item with `python3 .docs-schema/records.py
-list`, search, and generated tree relations when available. Keep one root per
+Find an existing root or child work item with the resolved checker's `list`
+command, search, and generated tree relations when available. Keep one root per
 captured topic and one child per delegated task needing separate history under
 a graph-capable schema; each has its own manifest path. Follow the established
 project capture policy. When capture is enabled without a more specific policy,
-use selective capture: preserve information that changes the goal or accepted scope, explains
+use selective capture: preserve information that changes the goal or accepted
+scope, explains
 a consequential decision, establishes progress or verification, or affects
 remaining work and continuation. Group discussion supporting the same outcome
 into an accurate entry; the unit of history is a meaningful change, not a message.
@@ -79,7 +96,7 @@ new owner, pending requests, reply destination, actual author, and consumed
 review/fix limits. A read-only assignee can return events to an authorized
 recorder; preserve authorship without expanding the assignee's write authority.
 
-Use the local manifest's `create_when`, allowed path, metadata, lifecycle, and
+Use the selected schema's `create_when`, allowed path, metadata, lifecycle, and
 required sections for a specialized local record. When registered, create a
 `decision` for a material choice, `design` for internal architecture, `plan`
 for internal tasks, and `tdd` for a durable test cycle trace only when
@@ -93,10 +110,11 @@ controller and its task format; use `Task N` extraction headings only when
 that controller requires them.
 Use `reference-note` for reusable sourced facts with validity bounds when that
 type is registered. For an unregistered type, record the material need under
-the capture policy; update the local schema explicitly if the type is truly needed.
-Do not create unregistered directories or manual indexes. Read the configured
-repository's `.docs-schema/LIFECYCLE.md` when present; use its state meanings
-without treating one type's states as another's.
+the capture policy; update the selected record schema explicitly if the type
+is needed. Do not create unregistered directories or manual indexes. Read the
+configured lifecycle guide, or this skill's
+[LIFECYCLE.md](references/LIFECYCLE.md); use its state meanings without treating
+one type's states as another's.
 
 ## Keep contracts and evidence linked
 
@@ -120,7 +138,7 @@ merge, checks, contract update, and next action to the work item. When a code
 branch is abandoned, record branch name, last SHA, reason, and useful decision
 or experiment links; do not adopt unmerged requirements. Preserve any change
 artifacts through their owning procedure and transition the work item according
-to its registered lifecycle once history is settled. In the starter schema,
+to its registered lifecycle once history is settled. In the bundled schema,
 `archived` means retained history, not an invalid or deprecated claim. For
 postponed work, use the registered postponed state when it has one and name the
 trigger to resume. Do not silently delete a record.
@@ -154,15 +172,15 @@ only after checking the recorded values, not just their source artifacts.
 
 ## Manual weekly report
 
-Create a report only on explicit request. Read the local manifest's `timezone`,
+Create a report only on explicit request. Read the selected schema's `timezone`,
 `week_start`, and registered `weekly-report` path and template; report a schema
 gap if that type is unavailable. Use the period's inclusive start and exclusive
 end to select events, and derive the report ID
-and filename from that schema. When the local checker provides it, run
-`python3 .docs-schema/records.py events --week YYYY-MM-DD` from the canonical
-repository; verify its interval against the local schema. Collect every
-root and child work-item timeline event in the period and verify relevant OpenSpec
-specs/changes, experiment records, and code SHAs.
+and filename from that schema. When the selected checker provides it, run
+the resolved checker's `events --week YYYY-MM-DD` command from the canonical
+repository; verify its interval against the selected record schema. Collect
+every root and child work-item timeline event in the period and verify relevant
+OpenSpec specs/changes, experiment records, and code SHAs.
 Summarize completed, in-progress, decisions with evidence, deferred/blocked,
 and next actions with source links. State the generation `as_of` timestamp.
 Follow the registered lifecycle: keep the report in a reviewable state until
@@ -171,8 +189,9 @@ week updates the same file. For a finalized past week, append a dated correction
 entry with the prior statement, replacement, reason,
 and source before changing its summary; retain the correction history.
 
-Run `python3 .docs-schema/records.py validate` and use `list` to discover
-records. Fix missing fields, orphan links, and stale state. For a schema update,
+Run the resolved checker's `validate` command with the canonical `--root` and
+use `list` to discover records. Fix missing fields, orphan links, and stale
+state. For a schema update that changes stored meaning,
 increment `schema_version`, explicitly migrate affected records, validate, and
 persist the schema and migration together through the project's reviewed,
 authorized Git procedure. Do not auto-rename legacy experiment

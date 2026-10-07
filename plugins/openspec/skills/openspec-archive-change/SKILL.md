@@ -23,7 +23,7 @@ branch, do not sync its unadopted requirements. Record the abandonment reason,
 last SHA, and useful evidence in the configured work item, then use the
 existing archive procedure's warnings and choices without inventing a main
 contract. `archived` means preserved history. Route work-item updates through a
-current host-listed documentation skill or the local `.docs-schema` and normal
+current host-listed documentation skill or the project's configured record rules and normal
 file tools otherwise. Do not create a document branch.
 If a change mixes adopted and unadopted requirements, reconcile its delta
 artifacts first so the sync input describes only adopted behavior; preserve
@@ -33,8 +33,9 @@ A companion skill is available only when the current host's skill catalog lists
 it. Resolve and read/invoke the exact installed name and resource path reported
 by that catalog. A vendor checkout, sibling folder, symlink target, or plugin
 cache entry is not availability. For required history capture, use a listed
-documentation skill; otherwise apply the configured policy with the
-project-owned manifest, lifecycle, template, checker, and ordinary file tools.
+documentation skill; otherwise apply the configured policy with established record
+rules and ordinary file tools. Use configured templates and checkers when
+available.
 Do not read or install an unlisted skill. Spec synchronization never depends on
 another skill: the full native fallback is included in step 4.
 

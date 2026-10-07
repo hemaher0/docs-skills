@@ -15,7 +15,7 @@ Follow the project's work-history capture policy; a configured storage
 location does not enable capture. When that policy requires it, append this
 discussion and its evolving conclusion to its owning work item
 through a current host-listed document workflow, otherwise through the
-project-local `.docs-schema` and normal file tools. In parallel work, use the assigned child
+project record rules and normal file tools. In parallel work, use the assigned child
 record when supported. For product
 behavior, inspect the relevant main spec before proposing a changed contract;
 capture changed or missing requirements and verifiable scenarios in the delta
@@ -26,8 +26,9 @@ A companion skill is available only when the current host's skill catalog lists
 it. Resolve and read/invoke the exact installed name and resource path reported
 by that catalog. A vendor checkout, sibling folder, symlink target, or plugin
 cache entry is not availability. For required history capture, use a listed
-document workflow; otherwise apply the configured policy with the project-owned
-manifest, lifecycle, template, checker, and ordinary file tools. Do not read or
+document workflow; otherwise apply the configured policy with established record
+rules and ordinary file tools. Use configured templates and checkers when
+available. Do not read or
 install an unlisted skill.
 
 **Explore mode is for thinking.** Read files, search code, and investigate

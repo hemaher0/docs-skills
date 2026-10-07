@@ -1,14 +1,14 @@
 # Local Documentation Configuration
 
-<!-- Create or merge this package section into root AGENTS.local.md during
-installation. Mark configuration complete only after required values or their
-existing authoritative sources are resolved. Remove unused fields/headings. Preserve existing values
-and other packages' sections. Project-wide capture, persistence, audience,
-document conventions and commands stay in their existing configuration sources.
-Use the configured canonical repository's local .docs-schema without copying
-its paths/types here. Connect the file through existing AGENTS.md, or a
-recommended AGENTS.md symlink when absent, following the source README.
-Local paths must refer to the same configured stores. Keep credentials out. -->
+<!-- Merge this section into root AGENTS.local.md only when the project needs
+local settings not already governed by an existing source. Skill installation
+alone does not require this file. Preserve existing values and other sections;
+remove unused fields/headings and resolve retained placeholders. Project-wide
+capture, persistence, audience, document conventions and commands stay in their
+existing sources. Keep reusable templates and tools in their owning skill; custom schema paths
+identify existing JSON definitions. Keep this file connected through the project's
+existing agent instruction mechanism. Local paths refer to the same configured
+stores. Keep credentials out. -->
 
 ## Documentation Configuration Status
 
@@ -19,3 +19,5 @@ Local paths must refer to the same configured stores. Keep credentials out. -->
 
 - Canonical work-item repository: `<absolute local checkout of the same configured repository, or None>`
 - Reference notes root: `<local path override for the configured reference store, or None>`
+
+- Custom record schema: `<local JSON path override when needed; omit for bundled defaults>`

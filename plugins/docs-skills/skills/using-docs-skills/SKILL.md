@@ -11,7 +11,7 @@ entry is not availability. Resolve and read/invoke the exact installed name and
 resource path reported by that catalog; the relative links below identify the
 compatible owner but are not a discovery path. Invoke a listed owner when it
 applies. When it is not listed, complete the bounded fallback below from
-effective project rules, the project-owned schema or native tool, and ordinary
+effective project rules, the configured record rules or native tool, and ordinary
 file tools. Do not read an unlisted skill's folder or templates, install it
 silently, or route repeatedly.
 
@@ -19,9 +19,9 @@ Read effective project instructions and their referenced configuration. Read
 root `AGENTS.local.md` when it exists. Shared capture, persistence, audience
 and document rules stay in their existing policy sources. When history capture is
 configured, follow that policy, locate the canonical work-item repository and
-its local `.docs-schema/manifest.json`, and find the owning node by subject and
-links. Append to it or create one from the local template. The local schema
-wins over this plugin's bundled starter. Report a missing required source
+its configured record definitions, and find the owning node by subject and
+links. Append to it or create one from the selected template. A configured
+custom schema takes precedence over bundled defaults. Report a missing required source
 without silently creating a second history. Reader-facing document work that
 does not require work records can proceed under its own project rules.
 Installation alone does not enable history capture. Installation and project
@@ -30,12 +30,13 @@ work uses the effective settings and resolves only gaps material to that work.
 When the host lists
 [maintaining-work-records](../maintaining-work-records/SKILL.md), use it for
 configured capture and local record types. Otherwise read the canonical
-repository's local manifest, lifecycle, and relevant template; locate records
+repository's configured schema, lifecycle, and relevant template; locate records
 with its checker or search tools, make the policy-required update, and run its
-validator. Do not use the bundled starter in place of an existing local schema.
+validator. Preserve a configured schema until its owner explicitly migrates it.
 
-Keep schema paths/types in the canonical repository's `.docs-schema`, formal
-store configuration in its native tool, and document commands/conventions in
+Keep custom record definitions in their configured JSON file and common
+resources in the owning skill, formal store configuration in its native tool,
+and document commands/conventions in
 their existing configuration or project guide. Inspect runtime facts rather
 than copying them into local settings. A selected external checkout override
 must resolve the same configured canonical repository, not another history.
@@ -48,7 +49,7 @@ message length or type does not determine significance. A separate `decision`,
 When parallel agents need durable history and the host lists
 [coordinating-parallel-document-work](../coordinating-parallel-document-work/SKILL.md),
 use it. Otherwise give each independently writable artifact one owner; create
-separate child work items only when the local schema supports
+separate child work items only when the selected record schema supports
 `parent_work_item_id`; have read-only workers return evidence to an authorized
 recorder; and keep one Git/index integrator for a shared checkout. The local
 schema controls whether child nodes are available; do not silently replace an
@@ -82,7 +83,7 @@ that an unrelated document type supplies them. Use the following owners:
   rules or sending the work back in a loop.
 - **Local work history and weekly reports:** When listed, use
   [maintaining-work-records](../maintaining-work-records/SKILL.md). Otherwise
-  apply the configured capture policy and local schema directly: use `list` and
+  apply the configured capture policy and selected record schema directly: use `list` and
   `tree` to locate the owning record, append material events with actual
   authorship, reconcile lifecycle/current state/next action, and validate. For
   a manually requested weekly report, use the registered period and template,
@@ -127,7 +128,7 @@ sources; technical review and Git candidate/message review keep their owners.
 ## Finish
 
 Check the changed document against its owner, sources, format, and links. Run
-the local schema validator for changed local records. Verify that each written
+the selected record schema validator for changed local records. Verify that each written
 or changed artifact was included in the checks applicable to its owner before
 claiming it was validated. A local-record checker establishes coverage only
 for the files it actually examined; validate other artifacts through their

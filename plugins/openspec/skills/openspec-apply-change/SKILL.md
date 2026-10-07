@@ -21,7 +21,7 @@ spec, verify that contract directly. Compare code and tests to the applicable
 spec. Follow the project's work-history capture policy; a configured storage
 location does not enable capture. When that policy requires it, keep the owning
 work-item timeline linked and current through an
-a current host-listed document workflow; otherwise use local `.docs-schema`
+a current host-listed document workflow; otherwise use configured project record rules
 and normal file tools. In parallel work, use the assigned child record when
 supported by that schema. Do not create a document branch.
 
@@ -29,8 +29,9 @@ A companion skill is available only when the current host's skill catalog lists
 it. Resolve and read/invoke the exact installed name and resource path reported
 by that catalog. A vendor checkout, sibling folder, symlink target, or plugin
 cache entry is not availability. For required history capture, use a listed
-documentation skill; otherwise apply the configured policy with the
-project-owned manifest, lifecycle, template, checker, and ordinary file tools.
+documentation skill; otherwise apply the configured policy with established record
+rules and ordinary file tools. Use configured templates and checkers when
+available.
 Do not read or install an unlisted skill.
 
 **Store selection:** If the user names a store (a store is a standalone OpenSpec repo registered on this machine) or the work lives in one, run `openspec store list --json` to discover registered store ids, then pass `--store <id>` on the commands that read or write specs and changes (`new change`, `status`, `instructions`, `list`, `show`, `validate`, `archive`, `doctor`, `context`, `view`). Once selected, treat `--store <id>` as sticky for the rest of the workflow. Every unscoped example of those commands below is shorthand: before running it, append the flag. For example, run `openspec status --change "<name>" --json --store "<id>"`, not the unscoped form shown below. Other commands do not take the flag. Hints printed by commands already carry the flag; keep it on follow-ups. Without a store, commands act on the nearest local `openspec/` root.
