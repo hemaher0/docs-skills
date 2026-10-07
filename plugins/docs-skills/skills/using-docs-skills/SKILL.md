@@ -43,7 +43,10 @@ Determine whether the task concerns a product behavior contract, experiment,
 local work history, reusable knowledge, public reader-facing documentation, or
 a domain-owned artifact. Search existing files and applicable project rules
 before choosing a location. Preserve user-designated paths and formats unless
-they conflict with the governing owner. Use the following owners:
+they conflict with the governing owner. Before writing a requested artifact,
+resolve its owner and applicable placement, format, metadata, and lifecycle
+rules from these sources. Surface missing required rules rather than assuming
+that an unrelated document type supplies them. Use the following owners:
 
 - **Product behavior:** Identify the project's governing contract. When
   OpenSpec owns it, read the relevant main spec first. For a changed or missing
@@ -89,8 +92,12 @@ sources; technical review and Git candidate/message review keep their owners.
 ## Finish
 
 Check the changed document against its owner, sources, format, and links. Run
-the local schema validator for changed local records. State which record and
-domain artifact were updated and any unresolved configuration or evidence gap.
+the local schema validator for changed local records. Verify that each written
+or changed artifact was included in the checks applicable to its owner before
+claiming it was validated. A local-record checker establishes coverage only
+for the files it actually examined; validate other artifacts through their
+own applicable checks. State which record and domain artifact were updated
+and any unresolved configuration or evidence gap.
 Product documentation accompanies its implementation in the assigned code
 checkout. Canonical work history uses its configured repository, audience, and
 persistence policy. Use the project's Git procedure for actual allocation,
