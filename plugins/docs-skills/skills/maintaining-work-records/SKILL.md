@@ -80,9 +80,11 @@ this skill is installed.
 
 For captured changes, preserve the actual source and authorship, timestamp,
 outcome, rationale, and relevant evidence. Record a decision before dependent
-work when practical and its observed result afterward. Maintain the current
-state and next action from those events, linking the governing artifacts rather
-than copying their entire contents. On context handoff,
+work when practical and its observed result afterward. Update affected
+current-state and next-action fields in the same record update as each captured
+material transition, including during active work. A timeline entry alone does
+not reconcile those fields. Link the governing artifacts rather than copying
+their entire contents. On context handoff,
 the resuming work owner reads the relevant root/descendants and linked sources
 to reconstruct what was discussed, planned, implemented, verified, and left
 to do. Fresh assignees receive bounded relevant context from that owner.
