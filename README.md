@@ -10,6 +10,8 @@ This repository provides two independently selectable collections:
 Keep the source under `.agents/vendor/` and link the chosen skill folders into
 `.agents/skills/`. Each project can choose its own skills and source revision.
 User-wide installations use the same structure under `$HOME/.agents/`.
+Claude Code uses `.claude/skills/` and `~/.claude/skills/`; see
+[Use with Claude Code](#use-with-claude-code).
 
 ## Install for a project
 
@@ -180,6 +182,64 @@ for CLI 1.8.0. For a new OpenSpec project, run `openspec init --tools none` from
 its root to initialize the store without generating duplicate tool skills.
 Preserve an existing store and configuration.
 
+## Use with Claude Code
+
+Claude Code discovers project skills in `.claude/skills/<name>/SKILL.md` and
+personal skills in `~/.claude/skills/<name>/SKILL.md`. The skill folders in
+this repository work there without conversion. Keep the source checkout
+described above and expose the selected skills from the project root, for
+example:
+
+```bash
+mkdir -p .claude/skills
+for skill in using-docs-skills maintaining-work-records; do
+  destination=".claude/skills/$skill"
+  if [ -e "$destination" ] || [ -L "$destination" ]; then
+    printf 'Preserve existing path: %s\n' "$destination" >&2
+    continue
+  fi
+  ln -s "../../.agents/vendor/docs-skills/plugins/docs-skills/skills/$skill" "$destination"
+done
+for skill in openspec-propose openspec-apply-change; do
+  destination=".claude/skills/$skill"
+  if [ -e "$destination" ] || [ -L "$destination" ]; then
+    printf 'Preserve existing path: %s\n' "$destination" >&2
+    continue
+  fi
+  ln -s "../../.agents/vendor/docs-skills/plugins/openspec/skills/$skill" "$destination"
+done
+```
+
+The link targets are relative to `.claude/skills`. For personal skills, run
+the same loop with `$HOME/.claude/skills` and the global source checkout under
+`$HOME/.agents/vendor`; the relative targets stay the same. Where symbolic
+links are unavailable, such as Windows without Developer Mode, copy each
+selected folder completely instead and copy it again after updating the source.
+
+Use a skill by its name, for example `/maintaining-work-records`, or let Claude
+select it from its description. Confirm that the name appears in the session's
+skill list; start a new session if a newly added folder is not listed.
+
+Claude Code can also install this repository as a plugin marketplace:
+
+```bash
+claude plugin marketplace add hemaher0/docs-skills
+claude plugin install docs-skills@hemaher0-docs-skills
+claude plugin install openspec@hemaher0-docs-skills
+```
+
+Inside a session, `/plugin marketplace add hemaher0/docs-skills` and
+`/plugin install <plugin>@<marketplace>` do the same. Plugin skills are
+namespaced, for example `/openspec:openspec-propose`. Plugin installation writes user-level
+configuration and a managed cache, separate from the folders above; a skill
+exposed both ways appears twice.
+
+Claude Code reads `CLAUDE.md`. It reads `AGENTS.md` only when no `CLAUDE.md`
+exists (Claude Code 2.1.277 or later) and does not read `AGENTS.local.md` by
+itself. When a project keeps shared instructions in `AGENTS.md` and also has a
+`CLAUDE.md`, add an `@AGENTS.md` line to `CLAUDE.md`. An instruction in
+`AGENTS.md` to read `AGENTS.local.md` keeps local configuration in effect.
+
 ## Availability and plugin installation
 
 Use the exact installed name and resource path from the current host's skill
@@ -192,9 +252,12 @@ does not merge them or promise precedence; remove the unintended exposure.
 The optional plugin marketplace [manifest](.agents/plugins/marketplace.json)
 contains [docs-skills](plugins/docs-skills/.codex-plugin/plugin.json) and
 [openspec](plugins/openspec/.codex-plugin/plugin.json). Its identifier is
-`hemaher0-docs-skills`. The host's plugin installation route creates managed
-cache copies and can write user-level configuration. Choose either package
-independently and follow the host's plugin instructions for that route.
+`hemaher0-docs-skills`. Claude Code reads the same packages through
+[.claude-plugin/marketplace.json](.claude-plugin/marketplace.json) and each
+plugin's `.claude-plugin/plugin.json`. The host's plugin installation route
+creates managed cache copies and can write user-level configuration. Choose
+either package independently and follow the host's plugin instructions for that
+route.
 
 ## Skills
 

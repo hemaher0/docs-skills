@@ -1,0 +1,17 @@
+{
+  "name": "openspec",
+  "version": "1.8.0",
+  "description": "Spec-driven proposal, planning, implementation, synchronization, and archive workflows for OpenSpec changes.",
+  "author": {
+    "name": "OpenSpec"
+  },
+  "repository": "https://github.com/hemaher0/docs-skills",
+  "license": "MIT",
+  "keywords": [
+    "openspec",
+    "spec-driven-development",
+    "proposal",
+    "planning",
+    "change-management"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "hemaher0-docs-skills",
+  "owner": {
+    "name": "hemaher0",
+    "url": "https://github.com/hemaher0"
+  },
+  "plugins": [
+    {
+      "name": "docs-skills",
+      "source": "./plugins/docs-skills",
+      "description": "Route and maintain repository documentation, diagrams, and reference notes.",
+      "version": "0.1.0",
+      "category": "productivity"
+    },
+    {
+      "name": "openspec",
+      "source": "./plugins/openspec",
+      "description": "Spec-driven proposal, planning, implementation, synchronization, and archive workflows for OpenSpec changes.",
+      "version": "1.8.0",
+      "category": "productivity"
+    }
+  ]
+}
