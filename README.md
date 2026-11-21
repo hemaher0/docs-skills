@@ -230,15 +230,18 @@ claude plugin install openspec@hemaher0-docs-skills
 
 Inside a session, `/plugin marketplace add hemaher0/docs-skills` and
 `/plugin install <plugin>@<marketplace>` do the same. Plugin skills are
-namespaced, for example `/openspec:openspec-propose`. Plugin installation writes user-level
-configuration and a managed cache, separate from the folders above; a skill
-exposed both ways appears twice.
+namespaced, for example `/openspec:openspec-propose`. Installation records the
+plugin in user settings by default; `--scope project` or `--scope local` records
+it in the project's shared or local settings instead. Installed plugins are
+separate copies from the folders above, so a skill exposed both ways appears
+twice.
 
-Claude Code reads `CLAUDE.md`. It reads `AGENTS.md` only when no `CLAUDE.md`
-exists (Claude Code 2.1.277 or later) and does not read `AGENTS.local.md` by
-itself. When a project keeps shared instructions in `AGENTS.md` and also has a
-`CLAUDE.md`, add an `@AGENTS.md` line to `CLAUDE.md`. An instruction in
-`AGENTS.md` to read `AGENTS.local.md` keeps local configuration in effect.
+Claude Code reads `CLAUDE.md`. It reads `AGENTS.md` only when no `CLAUDE.md` or
+`CLAUDE.local.md` exists in the working directory or above it (Claude Code
+2.1.277 or later) and does not read `AGENTS.local.md` by itself. When a project
+keeps shared instructions in `AGENTS.md` and also has a `CLAUDE.md`, add an
+`@AGENTS.md` line to `CLAUDE.md`. An instruction in `AGENTS.md` to read
+`AGENTS.local.md` keeps local configuration in effect.
 
 ## Availability and plugin installation
 
